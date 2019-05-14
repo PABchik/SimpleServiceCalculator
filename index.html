@@ -5,6 +5,9 @@
 
 <body>
 	<div id="brand">
+		<select>
+			<option v-for="brand in brands">{{ brand.text }}</option>
+		</select>
 		<p>{{ v }}</p>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>

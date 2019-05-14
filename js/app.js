@@ -3,8 +3,9 @@
 var app = new Vue({
     el: '#brand',
     data: {
-		v: null,
-		id: 111
+		brands: null,
+		id: 111,
+		v: null
     },
 	methods: {
 		inc: function() {
@@ -17,4 +18,10 @@ var app = new Vue({
 });
 
 axios.get('../test.php').then(response => {app.id = response.data;});
-app.getDataFromDB();
+axios.get('../php/main.php?entity=brand').then(response => {app.brands = response.data;});
+axios.get('../php/main.php?entity=brand').then(function(response) {
+	var result = JSON.stringify(response.data);
+	result = JSON.parse(result);
+	app.brands = result;
+	//alert(result[0].text);
+});
