@@ -4,9 +4,14 @@
 </head>
 
 <body>
-	<div id="brand">
+	<div id="brandModelSettings">
 		<select>
-			<option v-for="brand in brands">{{ brand.text }}</option>
+			<option v-for="logo in logos">{{ logo.img_src }}</option>
+		</select>
+		<p> {{ logos }} </p>
+		<select>	
+			<!-- <option v-for="logo in logos">{{ logo.img_src }}</option> -->
+			
 		</select>
 		<p>{{ v }}</p>
 	</div>

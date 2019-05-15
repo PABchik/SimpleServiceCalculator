@@ -7,6 +7,11 @@ header('Content-Type: application/json');
 $db = new DBHelper($host, $user, $password, $database);
 //$db->printVars();
 //echo $_SERVER['REQUEST_METHOD'];
+if (!empty($_GET) && count($_GET) == 1 && !empty($_GET['entity'])) {
+	$result = $db->getQuery("select * from ".$_GET['entity']);
+	if (!empty($result)) {
+		echo json_encode($result);
+	}
+}
 
-
-	echo json_encode($db->getQuery("select * from test_table"));
+	
