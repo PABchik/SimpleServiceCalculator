@@ -20,12 +20,18 @@ if (!empty($_GET) && count($_GET) == 1 && !empty($_GET['entity'])) {
         // echo "3"; 
             if (!empty($_GET['id']) && !empty($_GET['entity'])) {
                 // echo "4";
+
                 if (!empty($_GET['relatedEntity'])){
+                    if (!empty($_GET['join']) && !empty($_GET['on'])) {
+                        /*echo "select * from ".$_GET['entity']." left join ".$_GET['join']." on ".$_GET['join'].".".$_GET['on']."=".$_GET['entity'].".".$_GET['join']."_id where ".$_GET['entity'].".".$_GET['relatedEntity']."_id=".$_GET['id'];*/
+                        $result = $db->getQuery("select * from ".$_GET['entity']." left join ".$_GET['join']." on ".$_GET['join'].".".$_GET['on']."=".$_GET['entity'].".".$_GET['join']."_id where ".$_GET['entity'].".".$_GET['relatedEntity']."_id=".$_GET['id']);
+                    } else {
+                        $result = $db->getQuery("select * from ".$_GET['entity']." where ".$_GET['relatedEntity']."_id = ".$_GET[id]);
+                    }
                     // echo "5";
                     // echo "\n";
                     // echo "select * from ".$_GET['entity']." where ".$_GET['relatedEntity']."_id == ".$_GET[id];
                     // echo "\n";
-                    $result = $db -> getQuery("select * from ".$_GET['entity']." where ".$_GET['relatedEntity']."_id = ".$_GET[id]);
                 } 
                 else {
                     // echo "6";

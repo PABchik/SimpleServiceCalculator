@@ -5,16 +5,21 @@
 
 <body>
 	<div id="nav">
-		<select v-on:change="changeBrand($event)">
-			<option v-if="currentBrand == null"></option>
+		<select v-on:change="changeBrand($event)" v-model="currentBrandId">
+			<!-- <option v-if="currentBrand == null"></option> -->
 			<option v-for="brand in brands" v-bind:value="brand.id"> {{ brand.name }} </option>
 		</select>
-		<p>{{ currentBrand }}</p>
+		<p>{{ currentBrandId }}</p>
 		<p>{{ brands }}</p>
-		<select v-model="selectModel">
-			<option v-for="model in models"> {{ model.name }} </option>
+		<select v-on:change="changeModel($event)" v-model="currentModelId">
+			<!-- <option v-if="currentModel == null"></option> -->
+			<option v-for="model in models" v-bind:value="model.id"> {{ model.name }} </option>
 		</select>
-		<p>{{ currentModel }} </p>
+		<p>{{ currentModelId }} </p>
+		<select v-model="currentEngineId">
+			<option v-for="engine in engines" v-bind:value="engine.code"> {{ engine.name }} </option>
+		</select>
+		<p>{{ currentEngineId }} </p>
 	</div>
 	<!-- <div id="brandModelSettings">
 		<select>

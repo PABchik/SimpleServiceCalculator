@@ -44,9 +44,9 @@ app.getDataFromDB();
 var nav = new Vue({
 	el:'#nav',
 	data: {
-		currentBrand: null,
-		currentModel: null,
-		currentEngine: null,
+		currentBrandId: null,
+		currentModelId: null,
+		currentEngineId: null,
 		brands: null,
 		models: null,
 		engines: null
@@ -57,8 +57,6 @@ var nav = new Vue({
 			axios.get('../php/main.php?entity=brand').then(function(response) {
 				var result = JSON.stringify(response.data);
 				result = JSON.parse(result);
-				/*if (result != null)
-					nav.currentBrand = result[0].id;*/
 				nav.brands = result;
 				// alert("end of get Brands " + this.brands);
 				nav.getModels();
@@ -68,17 +66,32 @@ var nav = new Vue({
 			// alert(this.currentBrand);
 			// alert("getModels()");
 			// alert('../php/main.php?fun=findById&entity=model&id='+this.currentBrand+'&relatedEntity=brand');
-			axios.get('../php/main.php?fun=findById&entity=model&id='+this.currentBrand+'&relatedEntity=brand').then(function(response) {
+			axios.get('../php/main.php?fun=findById&entity=model&id='+this.currentBrandId+'&relatedEntity=brand').then(function(response) {
 				var result = JSON.stringify(response.data);
 				result = JSON.parse(result);
-				currentModel: result[0].id;
+				// alert("cur model will be null");
+				nav.currentModelId = null;
 				nav.models = result;
+			})
+		},
+		getEngines: function() {
+			axios.get('../php/main.php?fun=findById&entity=engine_model&join=engine&on=code&relatedEntity=model&id='+this.currentModelId).then(function(response) {
+				var result = JSON.stringify(response.data);
+				result = JSON.parse(result);
+				// alert("cur model will be null");
+				nav.currentEngineId = null;
+				nav.engines = result;
 			})
 		},
 		changeBrand: function(event) {
 			// alert("brand changed");
-			this.currentBrand = event.target.value;
+			// this.currentBrand = event.target.value;
 			this.getModels();
+		},
+		changeModel: function(event) {
+			// alert("ch mod");
+			// this.currentModel = event.target.value;
+			this.getEngines();
 		}
 	}
 });
