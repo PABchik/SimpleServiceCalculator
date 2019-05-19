@@ -25,27 +25,15 @@
 
 	<div id="services">
 		<p>{{ services }}</p>
-		
-		<div >
-			<input type="checkbox" v-for="service in services" v-bind:id="service.id" v-bind:value="service.name" v-model="checkedService"> 
-			<!-- <p>{{ service.name }}</p> -->
-			<!-- <label v-bind:for="service.id">{{ service.name }}</label> -->
+		<div>
+		<div v-for="s in services">
+			<input type="checkbox"  v-bind:id="s.id" v-bind:value="s.id" v-model="checkedService"> 
+			<label v-bind:for="s.id">{{ s.name }}</label>
+			<p>{{ s.price }} р</p>
 			<br>
 		</div>
+		</div>
 		<p>{{ checkedService }}</p>
-		<div id="example-3" class="demo">
-        <input type="checkbox" v-for="value in services" v-bind:id="value.id" v-bind:value="value.id" v-model="checkedNames">
-            <!-- {{ value.id }} -->
-        
-  <!-- <input type="checkbox" id="jack" value="Джек" v-model="checkedNames">
-  <label for="jack">Джек</label>
-  <input type="checkbox" id="john" value="Джон" v-model="checkedNames">
-  <label for="john">Джон</label>
-  <input type="checkbox" id="mike" value="Майк" v-model="checkedNames"> 
-  <label for="mike">Майк</label>-->
-  <br>
-  <span>Отмеченные имена: {{ checkedNames }}</span>
-</div>
 	</div>
 	<!-- <div id="brandModelSettings">
 		<select>

@@ -112,11 +112,10 @@ var serv = new Vue({
 	el: '#services',
 	data: {
 		services: null,
-		checkedService: [],
+		checkedService: null,
 		arr:[{id: 1, value: "jack"},
     {id: 2, value: "John"},
-    {id: 3, value: "Mike"}],
-    checkedNames: []
+    {id: 3, value: "Mike"}]
 	},
 	methods: {
 		findServices: function() {
@@ -127,7 +126,7 @@ var serv = new Vue({
 			axios.get('../php/main.php?fun=findServices&brand='+nav.currentBrandId+'&model='+nav.currentModelId+'&engine='+nav.currentEngineId).then(function(response) {
 				var result = JSON.stringify(response.data);
 				result = JSON.parse(result);
-				serv.checkedService = null;
+				serv.checkedService = [];
 				serv.services = result;
 				// alert(serv.services);
 			})
