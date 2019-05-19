@@ -92,6 +92,10 @@ var nav = new Vue({
 			// alert("ch mod");
 			// this.currentModel = event.target.value;
 			this.getEngines();
+		},
+		findServices: function() {
+			// alert("findServices");
+			serv.findServices();
 		}
 	}
 });
@@ -102,3 +106,37 @@ nav.getBrands();
 				result = JSON.parse(result);
 				nav.brands = result;
 			});*/
+
+
+var serv = new Vue({
+	el: '#services',
+	data: {
+		services: null,
+		checkedService: [],
+		arr:[{id: 1, value: "jack"},
+    {id: 2, value: "John"},
+    {id: 3, value: "Mike"}],
+    checkedNames: []
+	},
+	methods: {
+		findServices: function() {
+			// alert('../php/main.php?fun=findServices&brand='+nav.currentBrandId+'&model='+nav.currentModelId+'&engine='+nav.currentEngineId);
+			if (nav.currentEngineId != null &&
+				nav.currentBrandId != null &&
+				nav.currentModelId) {
+			axios.get('../php/main.php?fun=findServices&brand='+nav.currentBrandId+'&model='+nav.currentModelId+'&engine='+nav.currentEngineId).then(function(response) {
+				var result = JSON.stringify(response.data);
+				result = JSON.parse(result);
+				serv.checkedService = null;
+				serv.services = result;
+				// alert(serv.services);
+			})
+			} else {
+				alert("Для поиска услуг вы должны выбрать бренд, модель и двигатель своего автомобиля");
+			}
+				
+				// alert("cur model will be null");
+		}
+	
+}
+});

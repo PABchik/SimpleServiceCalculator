@@ -38,10 +38,25 @@ if (!empty($_GET) && count($_GET) == 1 && !empty($_GET['entity'])) {
                     $result = $db -> getQuery("select * from ".$_GET['entity']." where id = ".$_GET[id]);
                 }
                 // echo "7";
-                if (!empty($result)) {
+                
+            }
+            break;
+        case "findServices":
+            if (!empty($_GET['brand']) && !empty($_GET['model']) && !empty($_GET['engine'])) {
+                /*echo "select * from service_for_car where brand_id=".
+                    $_GET['brand']." and model_id=".
+                    $_GET['model']." and engine_id=".
+                    $_GET['engine'];*/
+                $result = $db->getQuery("select * from service_for_car sfc 
+                    join service on service.id=sfc.service_id 
+                    where sfc.brand_id=".
+                    $_GET['brand']." and sfc.model_id=".
+                    $_GET['model']." and sfc.engine_id='".
+                    $_GET['engine']."'");
+            }
+    }
+    if (!empty($result)) {
                     // echo "8";
                     echo json_encode($result);
                 }
-            }
-    }
 }
