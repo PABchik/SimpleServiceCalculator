@@ -4,17 +4,29 @@
 </head>
 
 <body>
-	<div id="brandModelSettings">
+	<div id="nav">
+		<select v-on:change="changeBrand($event)">
+			<option v-if="currentBrand == null"></option>
+			<option v-for="brand in brands" v-bind:value="brand.id"> {{ brand.name }} </option>
+		</select>
+		<p>{{ currentBrand }}</p>
+		<p>{{ brands }}</p>
+		<select v-model="selectModel">
+			<option v-for="model in models"> {{ model.name }} </option>
+		</select>
+		<p>{{ currentModel }} </p>
+	</div>
+	<!-- <div id="brandModelSettings">
 		<select>
 			<option v-for="logo in logos">{{ logo.img_src }}</option>
 		</select>
 		<p> {{ logos }} </p>
 		<select>	
-			<!-- <option v-for="logo in logos">{{ logo.img_src }}</option> -->
+			<option v-for="logo in logos">{{ logo.img_src }}</option>
 			
 		</select>
 		<p>{{ v }}</p>
-	</div>
+	</div> -->
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
 	<script src="js/app.js"></script>
