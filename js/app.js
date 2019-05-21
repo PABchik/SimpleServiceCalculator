@@ -1,4 +1,6 @@
 
+
+
 var app = new Vue({
     el: '#brandModelSettings',
     data: {
@@ -202,12 +204,17 @@ var serv = new Vue({
 });
 
 var expense = new Vue({
-	el: '#expense',
+	el: '#expenses',
 	data: {
+		v: "asdassasd",
 		work: 0,
 		parts: 0
 	},
 	methods: {
+		findServices: function() {
+			// alert("click");
+			nav.findServices();
+		},
 		calc: function() {
 			expense.work = 0;
 			expense.parts = 0;
@@ -219,7 +226,7 @@ var expense = new Vue({
 			serv.checkedParts.forEach(function(item) {
 				expense.parts += Number(item.price) * Number(item.count);
 			});
-
+			// alert("calc");
 
 		},
 		addPart: function(part) {

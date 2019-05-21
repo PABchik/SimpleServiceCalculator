@@ -1,61 +1,122 @@
 <html>
 <head>
-	<meta charset="utf-8">
+	 <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 
 <body>
+	<div class="container-fluid">
 	<div id="nav">
-		<select v-on:change="changeBrand($event)" v-model="currentBrandId">
-			<!-- <option v-if="currentBrand == null"></option> -->
-			<option v-for="brand in brands" v-bind:value="brand.id"> {{ brand.name }} </option>
-		</select>
-		<p>{{ currentBrandId }}</p>
-		<p>{{ brands }}</p>
-		<select v-on:change="changeModel($event)" v-model="currentModelId">
-			<!-- <option v-if="currentModel == null"></option> -->
-			<option v-for="model in models" v-bind:value="model.id"> {{ model.name }} </option>
-		</select>
-		<p>{{ currentModelId }} </p>
-		<select v-model="currentEngineId">
-			<option v-for="engine in engines" v-bind:value="engine.code"> {{ engine.name }} </option>
-		</select>
-		<p>{{ currentEngineId }} </p>
-		<button v-on:click="findServices()">Найти услуги</button>
-	</div>
+		
+		<div class="row">
+			<div class="col-sm-2"></div>
+			<div class="col-sm-8">
+				<h1 class="header text-center">Калькулятор стоимости ТО</h1>
+			</div>
+			<div class="col-sm-2"></div>
+		</div>
 
-	<div id="expense">
-		<p>работы: {{ work }}</p>
-		<p>запчасти: {{ parts }}</p>
-		<br>
-		<p>Итого: {{ work + parts }}</p>
+		<div class="row" style="margin-top:30px;">
+			<div class="col"></div>
+			<div class="col">
+				<h5 class="text-center">Марка</h4>
+				<select v-on:change="changeBrand($event)" v-model="currentBrandId" class="form-control">
+					<option v-if="currentBrandId == null" disabled>Выберите марку автомобиля</option>
+					<option v-for="brand in brands" v-bind:value="brand.id" placeholder="Выберите марку автомобиля"> {{ brand.name }} </option>
+				</select>
+			</div>
+			<div class="col">
+				<h5 class="text-center">Модель</h4>
+				<select v-on:change="changeModel($event)" v-model="currentModelId" class="form-control">
+					<option v-if="currentBrandId == null" disabled>Сначала выберите марку автомобиля</option>
+					<option v-else disabled>Выберите модель автомобиля</option>
+					<option v-for="model in models" v-bind:value="model.id"> {{ model.name }} </option>
+				</select>
+			</div>
+			<div class="col">
+				<h5 class="text-center">Двигатель</h4>
+				<select v-model="currentEngineId" class="form-control">
+					<option v-if="currentBrandId == null" disabled>Сначала выберите марку и модель вашего автомобиля</option>
+					<option v-if="currentModelId == null && currentBrandId != null" disabled>Сначала выберите модель вашего автомобиля</option>
+					<option v-else disabled>Выберите двигатель вашего автомобиля</option>
+					<option v-for="engine in engines" v-bind:value="engine.code"> {{ engine.name }} </option>
+				</select>
+			</div>
+			<div class="col"></div>
+			<div class="col"></div>
+		</div>
+
+		
+		
+		<!-- <p>{{ currentBrandId }}</p>
+		<p>{{ brands }}</p>
+		
+		<p>{{ currentModelId }} </p>
+		
+		<p>{{ currentEngineId }} </p> -->
+		
 	</div>
-	<div id="services">
-		<p>{{ services }}</p>
+<div id="expenses">
+	<div class="row" style="margin-top:30px">
+			<div class="col-sm-4"></div>
+			<div class="col-sm-2 border-box">
+				
+					<p class="font-italic">стоимость работ: <br>{{ work }}  &#x20bd</p>
+					<p class="font-italic">стоимость запчастей: <br>{{ parts }}  &#x20bd</p>
+					<p class="font-weight-bold lead">___________________</p>
+					<p class="font-italic font-weight-bold lead">Итого: {{ work + parts }}  &#x20bd</p>
+				</div>			
+			
+			<div class="col-sm-2"><button v-on:click="findServices()" class="col btn btn-primary" >Найти услуги</button></div>
+			<div class="col-sm-4"></div>
+		</div>
+	</div>
+	<div id="services" style="margin-top:50px">
+		<!-- <p>{{ services }}</p> -->
 		<div>
 		<div v-for="s in services">
-			<input type="checkbox"  v-bind:id="s.id" v-bind:value="s" v-model="checkedService" v-on:change="checkChanges(s.id)"> 
-			<b><label v-bind:for="s.id">{{ s.name }}</label></b>
-			<p>{{ s.price }} р</p>
-			<div>
-				<div v-for="type in partTypesForService">
-					<!-- <p>{{ type.service_for_car_id == s.id }} </p> -->
-					<div v-if="type.service_for_car_id == s.id && checkedService.indexOf(s) != -1">
-						<input type="checkbox" v-bind:value="type" v-model="checkedPartTypes">
-						<label v-bind:for=type.id>{{ type.name }}</label>
-						<div>
-							<div v-for="part in partsForCar">
-								<!-- <p>{{part.name}}  {{part}}</p> -->
-								<div v-if="part.part_type_id == type.id && part.service_for_car_id == s.id && checkedPartTypes.indexOf(type) != -1">
-									<p><input type="radio" v-bind:name="part.part_type_id" v-bind:value="part" v-on:click="addPart(part)" >{{part.name}}	{{ part.price * part.count}} р</p>
+			<div class="row">
+				<div class="col"></div>
+				<div class="col service-box">
+				<h5><label><input type="checkbox"  v-bind:id="s.id" v-bind:value="s" v-model="checkedService" v-on:change="checkChanges(s.id)">
+				{{ s.name }}   {{ s.price }}&#x20bd</label>
+				<small class="text-muted"><br>{{s.description}}</small></h5>
+				<div>
+					<div v-for="type in partTypesForService">
+						<!-- <p>{{ type.service_for_car_id == s.id }} </p> -->
+						<div class="row">
+							<div class="col-sm-1"></div>
+							<div class="col-sm-11">
+							<div v-if="type.service_for_car_id == s.id && checkedService.indexOf(s) != -1">
+								<h6><label><input type="checkbox" v-bind:value="type" v-model="checkedPartTypes" v-bind:id="type">
+								{{ type.name }}</label><h6>
+								<div>
+									<div v-for="part in partsForCar">
+										<!-- <p>{{part.name}}  {{part}}</p> -->
+										<div class="row">
+										<div class="col-sm-1"></div>
+										<div class="col-sm-11">
+										<div v-if="part.part_type_id == type.id && part.service_for_car_id == s.id && checkedPartTypes.indexOf(type) != -1">
+											<label><input type="radio" v-bind:name="part.part_type_id" v-bind:value="part" v-on:click="addPart(part)" >{{part.name}}	{{ part.price * part.count}} &#x20bd</label>
+										</div>
+										</div>
+										</div>
+									</div>
 								</div>
 							</div>
+							</div>
+						<!-- <p>{{ partTypesForService }}</p> -->
 						</div>
 					</div>
-					<!-- <p>{{ partTypesForService }}</p> -->
 				</div>
-			</div>
-			<br>
-			<br>
+				</div>
+				<div class="col"></div>
+			</div> <!-- end of div row -->
 		</div>
 		</div>
 		<p>{{ checkedService }}</p>
@@ -76,7 +137,11 @@
 		</select>
 		<p>{{ v }}</p>
 	</div> -->
-	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
 	<script src="js/app.js"></script>
 </body>
