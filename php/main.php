@@ -43,20 +43,77 @@ if (!empty($_GET) && count($_GET) == 1 && !empty($_GET['entity'])) {
             break;
         case "findServices":
             if (!empty($_GET['brand']) && !empty($_GET['model']) && !empty($_GET['engine'])) {
-                /*echo "select * from service_for_car where brand_id=".
-                    $_GET['brand']." and model_id=".
-                    $_GET['model']." and engine_id=".
-                    $_GET['engine'];*/
-                $result = $db->getQuery("select * from service_for_car sfc 
-                    join service on service.id=sfc.service_id 
+                /*echo "select sfc.id,
+                sfc.service_id,
+                sfc.price,
+                s.name,
+                s.description
+                 from service_for_car sfc 
+                    left join service s on s.id=sfc.service_id 
+                    where sfc.brand_id=".
+                    $_GET['brand']." and sfc.model_id=".
+                    $_GET['model']." and sfc.engine_id='".
+                    $_GET['engine']."'";*/
+                $result = $db->getQuery("select sfc.id,
+                sfc.service_id,
+                sfc.price,
+                s.name,
+                s.description
+                 from service_for_car sfc 
+                    left join service s on s.id=sfc.service_id 
                     where sfc.brand_id=".
                     $_GET['brand']." and sfc.model_id=".
                     $_GET['model']." and sfc.engine_id='".
                     $_GET['engine']."'");
             }
+            break;
+        case "getPartTypes":
+        /*echo "select * from part_type_for_service ptfs
+                    join part_type pt on pt.id=ptfs.part_type_id
+                    where ptfs.service_for_car_id=".$_GET['id'];*/
+            // if (!empty($_GET['id'])) {
+                /*echo "select * from part_type_for_service ptfs
+                    join part_type pt on pt.id=ptfs.part_type_id";*/
+                $result = $db->getQuery("select * from part_type_for_service ptfs
+                    join part_type pt on pt.id=ptfs.part_type_id");
+                break;
+        case "getPartsForCar":
+        /*echo "select * from car_part cp
+                    join part on part.id=cp.part_code_id 
+                    where cp.brand_id=".
+                    $_GET['brand']." and cp.model_id=".
+                    $_GET['model']." and cp.engine_id='".
+                    $_GET['engine']."'";*/
+                    /*echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
+                    var_dump($_GET);
+                    echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
+                    echo "select * from car_part cp
+                    join part on part.code=cp.part_id 
+                    where cp.brand_id=".
+                    $_GET['brand']." and cp.model_id=".
+                    $_GET['model']." and cp.engine_id='".
+                    $_GET['engine']."'";*/
+             $result = $db->getQuery("select 
+                    cp.id,
+                    part.code,
+                    part.name,
+                    part.price,
+                    part.part_type_id,
+                    ptfs.count,
+                    ptfs.service_for_car_id
+                     from car_part cp
+                    left join part on part.code=cp.part_id 
+                    left join part_type_for_service ptfs on ptfs.part_type_id=part.part_type_id
+                    where cp.brand_id=".
+                    $_GET['brand']." and cp.model_id=".
+                    $_GET['model']." and cp.engine_id='".
+                    $_GET['engine']."'");
+        break;
+            // }
     }
     if (!empty($result)) {
                     // echo "8";
                     echo json_encode($result);
                 }
 }
+// echo $_GET['fun'] == "getPartTypes";

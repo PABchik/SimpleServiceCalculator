@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3307
--- Время создания: Май 20 2019 г., 12:19
+-- Время создания: Май 21 2019 г., 11:39
 -- Версия сервера: 5.6.38
 -- Версия PHP: 5.5.38
 
@@ -41,6 +41,29 @@ CREATE TABLE `brand` (
 INSERT INTO `brand` (`id`, `name`, `img_src`) VALUES
 (1, 'bmw', 'img/bmw.png'),
 (2, 'audi', 'img/audi.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `car_part`
+--
+
+CREATE TABLE `car_part` (
+  `id` int(11) NOT NULL,
+  `brand_id` int(11) NOT NULL,
+  `model_id` int(11) NOT NULL,
+  `engine_id` varchar(150) NOT NULL,
+  `part_id` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `car_part`
+--
+
+INSERT INTO `car_part` (`id`, `brand_id`, `model_id`, `engine_id`, `part_id`) VALUES
+(1, 1, 1, 'aaa123bmw', 'engineoil1'),
+(2, 1, 1, 'aaa123bmw', 'engineoil2'),
+(3, 1, 1, 'aaa123bmw', 'oilfiltrbmw1');
 
 -- --------------------------------------------------------
 
@@ -129,7 +152,8 @@ CREATE TABLE `part` (
 
 INSERT INTO `part` (`code`, `name`, `price`, `part_type_id`) VALUES
 ('engineoil1', 'двигательное масло bmw 1k', 3000, 1),
-('engineoil2', 'двигательное масло bmw 3k', 5000, 1);
+('engineoil2', 'двигательное масло bmw 3k', 5000, 1),
+('oilfiltrbmw1', 'масляный фильтр для bmw', 500, 2);
 
 -- --------------------------------------------------------
 
@@ -149,7 +173,8 @@ CREATE TABLE `part_type` (
 INSERT INTO `part_type` (`id`, `name`) VALUES
 (1, 'двигательное масло'),
 (2, 'масляный фильтр'),
-(3, 'масло для КП');
+(3, 'масло для КП'),
+(4, 'свеча зажигания');
 
 -- --------------------------------------------------------
 
@@ -170,7 +195,9 @@ CREATE TABLE `part_type_for_service` (
 
 INSERT INTO `part_type_for_service` (`id`, `part_type_id`, `service_for_car_id`, `count`) VALUES
 (1, 1, 1, 3),
-(2, 2, 1, 1);
+(2, 2, 1, 1),
+(3, 4, 2, 4),
+(4, 1, 5, 2);
 
 -- --------------------------------------------------------
 
@@ -190,7 +217,8 @@ CREATE TABLE `service` (
 
 INSERT INTO `service` (`id`, `name`, `description`) VALUES
 (1, 'Замена масла в двигателе', 'Замена масла и масляного фильтра в двигателе Вашего автомобиля. Данная процедура рекомендована раз в 5-10 тыс. км.'),
-(2, 'Замена свечей зажигания', 'Замена свечей зажигания рекомендована раз в 30-50 тыс. км.');
+(2, 'Замена свечей зажигания', 'Замена свечей зажигания рекомендована раз в 30-50 тыс. км.'),
+(3, 'Тестовая услуга1', 'ыфвфы');
 
 -- --------------------------------------------------------
 
@@ -215,7 +243,8 @@ INSERT INTO `service_for_car` (`id`, `service_id`, `brand_id`, `model_id`, `engi
 (1, 1, 1, 1, 'aaa123bmw', 1000),
 (2, 2, 1, 1, 'aaa123bmw', 5000),
 (3, 1, 1, 2, 'aaa123bmw', 1000),
-(4, 2, 1, 2, 'aaa456bmw', 6000);
+(4, 2, 1, 2, 'aaa456bmw', 6000),
+(5, 3, 1, 1, 'aaa123bmw', 1500);
 
 --
 -- Индексы сохранённых таблиц
@@ -226,6 +255,16 @@ INSERT INTO `service_for_car` (`id`, `service_id`, `brand_id`, `model_id`, `engi
 --
 ALTER TABLE `brand`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `car_part`
+--
+ALTER TABLE `car_part`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `brand_id` (`brand_id`),
+  ADD KEY `model_id` (`model_id`),
+  ADD KEY `engine_id` (`engine_id`),
+  ADD KEY `part_id` (`part_id`);
 
 --
 -- Индексы таблицы `engine`
@@ -287,6 +326,15 @@ ALTER TABLE `service_for_car`
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
+
+--
+-- Ограничения внешнего ключа таблицы `car_part`
+--
+ALTER TABLE `car_part`
+  ADD CONSTRAINT `car_part_ibfk_1` FOREIGN KEY (`brand_id`) REFERENCES `brand` (`id`),
+  ADD CONSTRAINT `car_part_ibfk_2` FOREIGN KEY (`model_id`) REFERENCES `model` (`id`),
+  ADD CONSTRAINT `car_part_ibfk_3` FOREIGN KEY (`engine_id`) REFERENCES `engine` (`code`),
+  ADD CONSTRAINT `car_part_ibfk_4` FOREIGN KEY (`part_id`) REFERENCES `part` (`code`);
 
 --
 -- Ограничения внешнего ключа таблицы `engine_model`

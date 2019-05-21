@@ -23,17 +23,47 @@
 		<button v-on:click="findServices()">Найти услуги</button>
 	</div>
 
+	<div id="expense">
+		<p>работы: {{ work }}</p>
+		<p>запчасти: {{ parts }}</p>
+		<br>
+		<p>Итого: {{ work + parts }}</p>
+	</div>
 	<div id="services">
 		<p>{{ services }}</p>
 		<div>
 		<div v-for="s in services">
-			<input type="checkbox"  v-bind:id="s.id" v-bind:value="s.id" v-model="checkedService"> 
-			<label v-bind:for="s.id">{{ s.name }}</label>
+			<input type="checkbox"  v-bind:id="s.id" v-bind:value="s" v-model="checkedService" v-on:change="checkChanges(s.id)"> 
+			<b><label v-bind:for="s.id">{{ s.name }}</label></b>
 			<p>{{ s.price }} р</p>
+			<div>
+				<div v-for="type in partTypesForService">
+					<!-- <p>{{ type.service_for_car_id == s.id }} </p> -->
+					<div v-if="type.service_for_car_id == s.id && checkedService.indexOf(s) != -1">
+						<input type="checkbox" v-bind:value="type" v-model="checkedPartTypes">
+						<label v-bind:for=type.id>{{ type.name }}</label>
+						<div>
+							<div v-for="part in partsForCar">
+								<!-- <p>{{part.name}}  {{part}}</p> -->
+								<div v-if="part.part_type_id == type.id && part.service_for_car_id == s.id && checkedPartTypes.indexOf(type) != -1">
+									<p><input type="radio" v-bind:name="part.part_type_id" v-bind:value="part" v-on:click="addPart(part)" >{{part.name}}	{{ part.price }} р</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- <p>{{ partTypesForService }}</p> -->
+				</div>
+			</div>
+			<br>
 			<br>
 		</div>
 		</div>
 		<p>{{ checkedService }}</p>
+		<p>{{ checkedPartTypes }}</p>
+		<!-- p>{{services}}</p>
+		<p>{{partTypesForService}}</p>
+		<p>{{ partsForCar }} </p> -->
+		<p>{{checkedParts}}</p>
 	</div>
 	<!-- <div id="brandModelSettings">
 		<select>

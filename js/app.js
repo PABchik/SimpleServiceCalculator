@@ -113,9 +113,10 @@ var serv = new Vue({
 	data: {
 		services: null,
 		checkedService: null,
-		arr:[{id: 1, value: "jack"},
-    {id: 2, value: "John"},
-    {id: 3, value: "Mike"}]
+		partTypesForService: null,
+		checkedPartTypes:[],
+		partsForCar: null,
+		checkedParts: []
 	},
 	methods: {
 		findServices: function() {
@@ -127,7 +128,15 @@ var serv = new Vue({
 				var result = JSON.stringify(response.data);
 				result = JSON.parse(result);
 				serv.checkedService = [];
+				serv.checkedPartTypes = [];
+				serv.checkedParts = [];
 				serv.services = result;
+				serv.partTypesForService = [];
+				/*serv.services.forEach(function(item, i) {
+					// alert("interation inside " + i);
+					serv.getPartTypesForService(item.id);
+				})*/
+				serv.getPartTypesForService();
 				// alert(serv.services);
 			})
 			} else {
@@ -135,7 +144,97 @@ var serv = new Vue({
 			}
 				
 				// alert("cur model will be null");
+		},
+		getPartTypesForService: function() {
+			
+				axios.get(/*'../php/main.php?fun=getPartTypes&id=' + serviceId*/'../php/main.php?fun=getPartTypes').then(function(response) {
+					// alert('../php/main.php?fun=getPartTypes');
+
+					var result = JSON.stringify(response.data);
+					// alert(result);
+					result = JSON.parse(result);
+					serv.partTypesForService=result;
+					// alert("Hi from get part types for service");
+					serv.getPartsForCar();
+				})
+			},
+		getPartsForCar:function() {
+			alert('../php/main.php?fun=getPartsForCar&brand=' + nav.currentBrandId +
+				'&model=' + nav.currentModelId + '&engine='+
+				nav.currentEngineId);
+			axios.get('../php/main.php?fun=getPartsForCar&brand=' + nav.currentBrandId +
+				'&model=' + nav.currentModelId + '&engine='+
+				nav.currentEngineId).then(function(response) {
+					// alert('../php/main.php?fun=getPartTypes');
+
+					var result = JSON.stringify(response.data);
+					// alert('../php/main.php?fun=getPartsForCar&brand=' + nav.currentBrandId +
+				// '&model=' + nav.currentModelId + '&engine='+
+				// nav.currentEngineId);
+					result = JSON.parse(result);
+					serv.partsForCar=result;
+		})
+		},
+		checkChanges: function(serviceForCarId) {
+			serv.checkedPartTypes.forEach(function(item, i) {
+				if (item.service_for_car_id == serviceForCarId) {
+					serv.checkedPartTypes.splice(i, 1);
+					serv.checkChanges(serviceForCarId);
+				}
+			});
+			serv.checkedParts.forEach(function(item, i) {
+				if (item.service_for_car_id == serviceForCarId) {
+					serv.checkedParts.splice(i, 1);
+					serv.checkChanges(serviceForCarId);
+				}
+			});
+			expense.calc();
+		},
+		calcExpense: function() {
+			expense.calc();
+		},
+		addPart:function(part) {
+			// alert("ADDD!");
+			expense.addPart(part);
 		}
 	
 }
+});
+
+var expense = new Vue({
+	el: '#expense',
+	data: {
+		work: 0,
+		parts: 0
+	},
+	methods: {
+		calc: function() {
+			expense.work = 0;
+			expense.parts = 0;
+			// var checkedServicesWithPrice = [];
+			serv.checkedService.forEach(function(item) {
+				// alert(item);
+				expense.work += Number(item.price);
+			});
+			serv.checkedParts.forEach(function(item) {
+				expense.parts += Number(item.price) * Number(item.count);
+			});
+
+
+		},
+		addPart: function(part) {
+			serv.checkedParts.forEach(function(item, i) {
+				if (part.service_for_car_id == item.service_for_car_id && part.part_type_id == item.part_type_id) {
+					serv.checkedParts.splice(i, 1);
+					// wasDeleted = true;
+					// alert("before break");
+					// break;
+				}
+
+			});
+			// alert(wasDeleted);
+			serv.checkedParts.push(part);
+			expense.calc();
+		}
+		}
 });
