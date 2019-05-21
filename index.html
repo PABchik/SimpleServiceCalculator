@@ -46,7 +46,7 @@
 							<div v-for="part in partsForCar">
 								<!-- <p>{{part.name}}  {{part}}</p> -->
 								<div v-if="part.part_type_id == type.id && part.service_for_car_id == s.id && checkedPartTypes.indexOf(type) != -1">
-									<p><input type="radio" v-bind:name="part.part_type_id" v-bind:value="part" v-on:click="addPart(part)" >{{part.name}}	{{ part.price }} р</p>
+									<p><input type="radio" v-bind:name="part.part_type_id" v-bind:value="part" v-on:click="addPart(part)" >{{part.name}}	{{ part.price * part.count}} р</p>
 								</div>
 							</div>
 						</div>

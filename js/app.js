@@ -159,9 +159,9 @@ var serv = new Vue({
 				})
 			},
 		getPartsForCar:function() {
-			alert('../php/main.php?fun=getPartsForCar&brand=' + nav.currentBrandId +
+			/*alert('../php/main.php?fun=getPartsForCar&brand=' + nav.currentBrandId +
 				'&model=' + nav.currentModelId + '&engine='+
-				nav.currentEngineId);
+				nav.currentEngineId);*/
 			axios.get('../php/main.php?fun=getPartsForCar&brand=' + nav.currentBrandId +
 				'&model=' + nav.currentModelId + '&engine='+
 				nav.currentEngineId).then(function(response) {
