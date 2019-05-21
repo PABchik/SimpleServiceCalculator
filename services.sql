@@ -1,0 +1,371 @@
+-- phpMyAdmin SQL Dump
+-- version 4.7.7
+-- https://www.phpmyadmin.net/
+--
+-- Хост: 127.0.0.1:3307
+-- Время создания: Май 21 2019 г., 11:39
+-- Версия сервера: 5.6.38
+-- Версия PHP: 5.5.38
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- База данных: `services`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `brand`
+--
+
+CREATE TABLE `brand` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `img_src` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `brand`
+--
+
+INSERT INTO `brand` (`id`, `name`, `img_src`) VALUES
+(1, 'bmw', 'img/bmw.png'),
+(2, 'audi', 'img/audi.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `car_part`
+--
+
+CREATE TABLE `car_part` (
+  `id` int(11) NOT NULL,
+  `brand_id` int(11) NOT NULL,
+  `model_id` int(11) NOT NULL,
+  `engine_id` varchar(150) NOT NULL,
+  `part_id` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `car_part`
+--
+
+INSERT INTO `car_part` (`id`, `brand_id`, `model_id`, `engine_id`, `part_id`) VALUES
+(1, 1, 1, 'aaa123bmw', 'engineoil1'),
+(2, 1, 1, 'aaa123bmw', 'engineoil2'),
+(3, 1, 1, 'aaa123bmw', 'oilfiltrbmw1');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `engine`
+--
+
+CREATE TABLE `engine` (
+  `code` varchar(150) NOT NULL,
+  `name` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `engine`
+--
+
+INSERT INTO `engine` (`code`, `name`) VALUES
+('aaa123bmw', '123 engine 2l'),
+('aaa456bmw', '456 engine 3l'),
+('audi111', '111a 2l'),
+('audi222', '222a 3l');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `engine_model`
+--
+
+CREATE TABLE `engine_model` (
+  `id` int(11) NOT NULL,
+  `engine_id` varchar(150) NOT NULL,
+  `model_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `engine_model`
+--
+
+INSERT INTO `engine_model` (`id`, `engine_id`, `model_id`) VALUES
+(1, 'aaa123bmw', 1),
+(2, 'aaa456bmw', 2),
+(3, 'audi111', 3),
+(4, 'audi222', 4),
+(5, 'aaa123bmw', 2),
+(6, 'aaa456bmw', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `model`
+--
+
+CREATE TABLE `model` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `brand_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `model`
+--
+
+INSERT INTO `model` (`id`, `name`, `brand_id`) VALUES
+(1, '5 series', 1),
+(2, '7 series', 1),
+(3, 'Q5', 2),
+(4, 'Q7', 2),
+(5, '3 series', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `part`
+--
+
+CREATE TABLE `part` (
+  `code` varchar(150) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `price` int(11) NOT NULL,
+  `part_type_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `part`
+--
+
+INSERT INTO `part` (`code`, `name`, `price`, `part_type_id`) VALUES
+('engineoil1', 'двигательное масло bmw 1k', 3000, 1),
+('engineoil2', 'двигательное масло bmw 3k', 5000, 1),
+('oilfiltrbmw1', 'масляный фильтр для bmw', 500, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `part_type`
+--
+
+CREATE TABLE `part_type` (
+  `id` int(11) NOT NULL,
+  `name` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `part_type`
+--
+
+INSERT INTO `part_type` (`id`, `name`) VALUES
+(1, 'двигательное масло'),
+(2, 'масляный фильтр'),
+(3, 'масло для КП'),
+(4, 'свеча зажигания');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `part_type_for_service`
+--
+
+CREATE TABLE `part_type_for_service` (
+  `id` int(11) NOT NULL,
+  `part_type_id` int(11) NOT NULL,
+  `service_for_car_id` int(11) NOT NULL,
+  `count` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `part_type_for_service`
+--
+
+INSERT INTO `part_type_for_service` (`id`, `part_type_id`, `service_for_car_id`, `count`) VALUES
+(1, 1, 1, 3),
+(2, 2, 1, 1),
+(3, 4, 2, 4),
+(4, 1, 5, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `service`
+--
+
+CREATE TABLE `service` (
+  `id` int(11) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `description` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `service`
+--
+
+INSERT INTO `service` (`id`, `name`, `description`) VALUES
+(1, 'Замена масла в двигателе', 'Замена масла и масляного фильтра в двигателе Вашего автомобиля. Данная процедура рекомендована раз в 5-10 тыс. км.'),
+(2, 'Замена свечей зажигания', 'Замена свечей зажигания рекомендована раз в 30-50 тыс. км.'),
+(3, 'Тестовая услуга1', 'ыфвфы');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `service_for_car`
+--
+
+CREATE TABLE `service_for_car` (
+  `id` int(11) NOT NULL,
+  `service_id` int(11) NOT NULL,
+  `brand_id` int(11) NOT NULL,
+  `model_id` int(11) NOT NULL,
+  `engine_id` varchar(150) NOT NULL,
+  `price` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `service_for_car`
+--
+
+INSERT INTO `service_for_car` (`id`, `service_id`, `brand_id`, `model_id`, `engine_id`, `price`) VALUES
+(1, 1, 1, 1, 'aaa123bmw', 1000),
+(2, 2, 1, 1, 'aaa123bmw', 5000),
+(3, 1, 1, 2, 'aaa123bmw', 1000),
+(4, 2, 1, 2, 'aaa456bmw', 6000),
+(5, 3, 1, 1, 'aaa123bmw', 1500);
+
+--
+-- Индексы сохранённых таблиц
+--
+
+--
+-- Индексы таблицы `brand`
+--
+ALTER TABLE `brand`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `car_part`
+--
+ALTER TABLE `car_part`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `brand_id` (`brand_id`),
+  ADD KEY `model_id` (`model_id`),
+  ADD KEY `engine_id` (`engine_id`),
+  ADD KEY `part_id` (`part_id`);
+
+--
+-- Индексы таблицы `engine`
+--
+ALTER TABLE `engine`
+  ADD PRIMARY KEY (`code`);
+
+--
+-- Индексы таблицы `engine_model`
+--
+ALTER TABLE `engine_model`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `engine_id` (`engine_id`),
+  ADD KEY `model_id` (`model_id`);
+
+--
+-- Индексы таблицы `model`
+--
+ALTER TABLE `model`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `part`
+--
+ALTER TABLE `part`
+  ADD PRIMARY KEY (`code`),
+  ADD KEY `part_type_id` (`part_type_id`);
+
+--
+-- Индексы таблицы `part_type`
+--
+ALTER TABLE `part_type`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `part_type_for_service`
+--
+ALTER TABLE `part_type_for_service`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `service_for_car_id` (`service_for_car_id`),
+  ADD KEY `part_type_id` (`part_type_id`);
+
+--
+-- Индексы таблицы `service`
+--
+ALTER TABLE `service`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `service_for_car`
+--
+ALTER TABLE `service_for_car`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `brand_id` (`brand_id`),
+  ADD KEY `engine_id` (`engine_id`),
+  ADD KEY `model_id` (`model_id`),
+  ADD KEY `service_id` (`service_id`);
+
+--
+-- Ограничения внешнего ключа сохраненных таблиц
+--
+
+--
+-- Ограничения внешнего ключа таблицы `car_part`
+--
+ALTER TABLE `car_part`
+  ADD CONSTRAINT `car_part_ibfk_1` FOREIGN KEY (`brand_id`) REFERENCES `brand` (`id`),
+  ADD CONSTRAINT `car_part_ibfk_2` FOREIGN KEY (`model_id`) REFERENCES `model` (`id`),
+  ADD CONSTRAINT `car_part_ibfk_3` FOREIGN KEY (`engine_id`) REFERENCES `engine` (`code`),
+  ADD CONSTRAINT `car_part_ibfk_4` FOREIGN KEY (`part_id`) REFERENCES `part` (`code`);
+
+--
+-- Ограничения внешнего ключа таблицы `engine_model`
+--
+ALTER TABLE `engine_model`
+  ADD CONSTRAINT `engine_model_ibfk_1` FOREIGN KEY (`engine_id`) REFERENCES `engine` (`code`),
+  ADD CONSTRAINT `engine_model_ibfk_2` FOREIGN KEY (`model_id`) REFERENCES `model` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `part`
+--
+ALTER TABLE `part`
+  ADD CONSTRAINT `part_ibfk_1` FOREIGN KEY (`part_type_id`) REFERENCES `part_type` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `part_type_for_service`
+--
+ALTER TABLE `part_type_for_service`
+  ADD CONSTRAINT `part_type_for_service_ibfk_1` FOREIGN KEY (`service_for_car_id`) REFERENCES `service_for_car` (`id`),
+  ADD CONSTRAINT `part_type_for_service_ibfk_2` FOREIGN KEY (`part_type_id`) REFERENCES `part_type` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `service_for_car`
+--
+ALTER TABLE `service_for_car`
+  ADD CONSTRAINT `service_for_car_ibfk_1` FOREIGN KEY (`brand_id`) REFERENCES `brand` (`id`),
+  ADD CONSTRAINT `service_for_car_ibfk_2` FOREIGN KEY (`engine_id`) REFERENCES `engine` (`code`),
+  ADD CONSTRAINT `service_for_car_ibfk_3` FOREIGN KEY (`model_id`) REFERENCES `model` (`id`),
+  ADD CONSTRAINT `service_for_car_ibfk_4` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

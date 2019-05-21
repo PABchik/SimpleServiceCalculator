@@ -1,0 +1,10 @@
+.border-box {
+	border: 2px solid #cac9c9;
+	border-radius: 6px;
+}
+.service-box {
+	border: 5px solid #e8e8e8;
+	border-radius: 6px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
