@@ -93,8 +93,8 @@
 							<div class="col-sm-1"></div>
 							<div class="col-sm-11">
 							<div v-if="type.service_for_car_id == s.id && checkedService.indexOf(s) != -1">
-								<h6><label><input type="checkbox" v-bind:value="type" v-model="checkedPartTypes" v-bind:id="type">
-								{{ type.name }}</label><h6>
+								<h6><label><input type="checkbox" v-bind:value="type" v-model="checkedPartTypes" v-bind:id="type" v-on:click="checkChanges(s.id, type.part_type_id)">
+								{{ type.name }}</label></h6>
 								<div>
 									<div v-for="part in partsForCar">
 										<!-- <p>{{part.name}}  {{part}}</p> -->

@@ -177,7 +177,15 @@ var serv = new Vue({
 					serv.partsForCar=result;
 		})
 		},
-		checkChanges: function(serviceForCarId) {
+		checkChanges: function(serviceForCarId, partTypeId) {
+			if (partTypeId != null) {
+				serv.checkedParts.forEach(function(item, i) {
+					if (item.service_for_car_id == serviceForCarId && item.part_type_id == partTypeId) {
+						serv.checkedParts.splice(i, 1);
+						serv.checkChanges(serviceForCarId, partTypeId);
+					}
+				});
+			}
 			serv.checkedPartTypes.forEach(function(item, i) {
 				if (item.service_for_car_id == serviceForCarId) {
 					serv.checkedPartTypes.splice(i, 1);
