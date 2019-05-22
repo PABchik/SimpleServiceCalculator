@@ -1,6 +1,5 @@
 
 
-
 var app = new Vue({
     el: '#brandModelSettings',
     data: {
@@ -61,43 +60,61 @@ var nav = new Vue({
 				result = JSON.parse(result);
 				nav.brands = result;
 				// alert("end of get Brands " + this.brands);
-				nav.getModels();
+				// nav.getModels();
 			})
 		},
 		getModels: function() {
 			// alert(this.currentBrand);
 			// alert("getModels()");
 			// alert('../php/main.php?fun=findById&entity=model&id='+this.currentBrand+'&relatedEntity=brand');
-			axios.get('../php/main.php?fun=findById&entity=model&id='+this.currentBrandId+'&relatedEntity=brand').then(function(response) {
+			axios.get('../php/main.php?fun=findById&entity=model&id='+this.currentBrandId.id+'&relatedEntity=brand').then(function(response) {
 				var result = JSON.stringify(response.data);
 				result = JSON.parse(result);
 				// alert("cur model will be null");
 				nav.currentModelId = null;
+				expense.currentModelName = null;
+				nav.engines = null;
 				nav.models = result;
 			})
 		},
 		getEngines: function() {
-			axios.get('../php/main.php?fun=findById&entity=engine_model&join=engine&on=code&relatedEntity=model&id='+this.currentModelId).then(function(response) {
+			axios.get('../php/main.php?fun=findById&entity=engine_model&join=engine&on=code&relatedEntity=model&id='+this.currentModelId.id).then(function(response) {
 				var result = JSON.stringify(response.data);
 				result = JSON.parse(result);
 				// alert("cur model will be null");
 				nav.currentEngineId = null;
+				expense.currentEngineName = null;
 				nav.engines = result;
 			})
 		},
 		changeBrand: function(event) {
 			// alert("brand changed");
-			// this.currentBrand = event.target.value;
+			this.currentBrandImgSrc = this.currentBrandId.img_src;
+			expense.currentBrandImgSrc = nav.currentBrandImgSrc;
+			expense.currentBrandName = nav.currentBrandId.name;
+			// alert(nav.currentBrandImgSrc);
+			nav.findServices();
 			this.getModels();
 		},
 		changeModel: function(event) {
 			// alert("ch mod");
 			// this.currentModel = event.target.value;
+			this.currentEngineId = null;
+			expense.currentModelName = nav.currentModelId.name;
+			nav.findServices();
 			this.getEngines();
 		},
 		findServices: function() {
-			// alert("findServices");
-			serv.findServices();
+			// alert("findServices ");
+			if (this.currentBrandId != null && this.currentModelId != null && this.currentEngineId != null) {
+				// alert("true in fs");
+				expense.currentEngineName = this.currentEngineId.name;
+				serv.findServices();
+			}
+			else {
+				// alert("false in fs");
+				serv.services = null;
+			}
 		}
 	}
 });
@@ -122,13 +139,14 @@ var serv = new Vue({
 	},
 	methods: {
 		findServices: function() {
-			// alert('../php/main.php?fun=findServices&brand='+nav.currentBrandId+'&model='+nav.currentModelId+'&engine='+nav.currentEngineId);
+			// alert('../php/main.php?fun=findServices&brand='+nav.currentBrandId.id+'&model='+nav.currentModelId.id +'&engine='+nav.currentEngineId.code);
 			if (nav.currentEngineId != null &&
 				nav.currentBrandId != null &&
-				nav.currentModelId) {
-			axios.get('../php/main.php?fun=findServices&brand='+nav.currentBrandId+'&model='+nav.currentModelId+'&engine='+nav.currentEngineId).then(function(response) {
+				nav.currentModelId != null) {
+			axios.get('../php/main.php?fun=findServices&brand='+nav.currentBrandId.id+'&model='+nav.currentModelId.id +'&engine='+nav.currentEngineId.code).then(function(response) {
 				var result = JSON.stringify(response.data);
 				result = JSON.parse(result);
+				// alert(result);
 				serv.checkedService = [];
 				serv.checkedPartTypes = [];
 				serv.checkedParts = [];
@@ -164,9 +182,9 @@ var serv = new Vue({
 			/*alert('../php/main.php?fun=getPartsForCar&brand=' + nav.currentBrandId +
 				'&model=' + nav.currentModelId + '&engine='+
 				nav.currentEngineId);*/
-			axios.get('../php/main.php?fun=getPartsForCar&brand=' + nav.currentBrandId +
-				'&model=' + nav.currentModelId + '&engine='+
-				nav.currentEngineId).then(function(response) {
+			axios.get('../php/main.php?fun=getPartsForCar&brand=' + nav.currentBrandId.id +
+				'&model=' + nav.currentModelId.id + '&engine='+
+				nav.currentEngineId.code).then(function(response) {
 					// alert('../php/main.php?fun=getPartTypes');
 
 					var result = JSON.stringify(response.data);
@@ -181,23 +199,25 @@ var serv = new Vue({
 			if (partTypeId != null) {
 				serv.checkedParts.forEach(function(item, i) {
 					if (item.service_for_car_id == serviceForCarId && item.part_type_id == partTypeId) {
+						// alert('good');
 						serv.checkedParts.splice(i, 1);
 						serv.checkChanges(serviceForCarId, partTypeId);
 					}
 				});
+			} else {
+				serv.checkedPartTypes.forEach(function(item, i) {
+					if (item.service_for_car_id == serviceForCarId) {
+						serv.checkedPartTypes.splice(i, 1);
+						serv.checkChanges(serviceForCarId);
+					}
+				});
+				serv.checkedParts.forEach(function(item, i) {
+					if (item.service_for_car_id == serviceForCarId) {
+						serv.checkedParts.splice(i, 1);
+						serv.checkChanges(serviceForCarId);
+					}
+				});	
 			}
-			serv.checkedPartTypes.forEach(function(item, i) {
-				if (item.service_for_car_id == serviceForCarId) {
-					serv.checkedPartTypes.splice(i, 1);
-					serv.checkChanges(serviceForCarId);
-				}
-			});
-			serv.checkedParts.forEach(function(item, i) {
-				if (item.service_for_car_id == serviceForCarId) {
-					serv.checkedParts.splice(i, 1);
-					serv.checkChanges(serviceForCarId);
-				}
-			});
 			expense.calc();
 		},
 		calcExpense: function() {
@@ -216,7 +236,11 @@ var expense = new Vue({
 	data: {
 		v: "asdassasd",
 		work: 0,
-		parts: 0
+		parts: 0,
+		currentBrandImgSrc: null,
+		currentBrandName: null,
+		currentModelName: null,
+		currentEngineName: null
 	},
 	methods: {
 		findServices: function() {

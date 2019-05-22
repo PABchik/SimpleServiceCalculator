@@ -11,23 +11,24 @@
 
 <body>
 	<div class="container-fluid">
+		<!-- <div class="service-box"> -->
 	<div id="nav">
 		
-		<div class="row">
+		<div class="row" style="">
 			<div class="col-sm-2"></div>
-			<div class="col-sm-8">
+			<div class="col-sm-8" style=" margin-top:10px;padding:100px 0 50px;background-color:#b72a20; color: white;">
 				<h1 class="header text-center">Калькулятор стоимости ТО</h1>
 			</div>
 			<div class="col-sm-2"></div>
 		</div>
 
-		<div class="row" style="margin-top:30px;">
+		<div class="row" style="margin-top:100px;">
 			<div class="col"></div>
 			<div class="col">
 				<h5 class="text-center">Марка</h4>
 				<select v-on:change="changeBrand($event)" v-model="currentBrandId" class="form-control">
 					<option v-if="currentBrandId == null" disabled>Выберите марку автомобиля</option>
-					<option v-for="brand in brands" v-bind:value="brand.id" placeholder="Выберите марку автомобиля"> {{ brand.name }} </option>
+					<option v-for="brand in brands" v-bind:value="brand" placeholder="Выберите марку автомобиля" class="font-weight-bold"> {{ brand.name }} </option>
 				</select>
 			</div>
 			<div class="col">
@@ -35,20 +36,20 @@
 				<select v-on:change="changeModel($event)" v-model="currentModelId" class="form-control">
 					<option v-if="currentBrandId == null" disabled>Сначала выберите марку автомобиля</option>
 					<option v-else disabled>Выберите модель автомобиля</option>
-					<option v-for="model in models" v-bind:value="model.id"> {{ model.name }} </option>
+					<option v-for="model in models" v-bind:value="model" class="font-weight-bold"> {{ model.name }} </option>
 				</select>
 			</div>
 			<div class="col">
 				<h5 class="text-center">Двигатель</h4>
-				<select v-model="currentEngineId" class="form-control">
+				<select v-model="currentEngineId" class="form-control" v-on:change="findServices()">
 					<option v-if="currentBrandId == null" disabled>Сначала выберите марку и модель вашего автомобиля</option>
 					<option v-if="currentModelId == null && currentBrandId != null" disabled>Сначала выберите модель вашего автомобиля</option>
 					<option v-else disabled>Выберите двигатель вашего автомобиля</option>
-					<option v-for="engine in engines" v-bind:value="engine.code"> {{ engine.name }} </option>
+					<option v-for="engine in engines" v-bind:value="engine" class="font-weight-bold"> {{ engine.name }} </option>
 				</select>
 			</div>
 			<div class="col"></div>
-			<div class="col"></div>
+			<!-- <div class="col"></div> -->
 		</div>
 
 		
@@ -58,40 +59,60 @@
 		
 		<p>{{ currentModelId }} </p>
 		
-		<p>{{ currentEngineId }} </p> -->
+		<p>current engine-{{ currentEngineId }} </p> -->
 		
 	</div>
 <div id="expenses">
 	<div class="row" style="margin-top:30px">
-			<div class="col-sm-4"></div>
-			<div class="col-sm-2 border-box">
-				
-					<p class="font-italic">стоимость работ: <br>{{ work }}  &#x20bd</p>
-					<p class="font-italic">стоимость запчастей: <br>{{ parts }}  &#x20bd</p>
-					<p class="font-weight-bold lead">___________________</p>
-					<p class="font-italic font-weight-bold lead">Итого: {{ work + parts }}  &#x20bd</p>
-				</div>			
+			<div class="col-sm-2"></div>			
+			<div class="col-sm-2">
+				<img v-if="currentBrandImgSrc != null" v-bind:src="currentBrandImgSrc" class="img-fluid"></img>
+				<div v-else style="background-color: #b72a20; color:white;"><p class="font-weight-bold text-center" style="padding:15px;">Brand is not selected</p></div>
+			</div>
+			<div class="col-sm-3">
+				<h5><span class="font-weight-normal" style="margin-right:10px;"> Марка: </span>
+					<span v-if="currentBrandName != null" > {{ currentBrandName }} </span>
+					<span v-else> не выбрано </span>
+				</h5>
+				<h5><span class="font-weight-normal" style="margin-right:10px;"> Модель: </span>
+					<span v-if="currentModelName != null" > {{ currentModelName }} </span>
+					<span v-else> не выбрано </span>
+				</h5>
+				<h5><span class="font-weight-normal" style="margin-right:10px;"> Двигатель: </span>
+					<span v-if="currentEngineName != null" > {{ currentEngineName }} </span>
+					<span v-else> не выбрано </span>
+				</h5>
+			</div>
+			<!-- <div class="col-sm-1"></div> -->
+			<!-- <div class="col"></div> -->
 			
-			<div class="col-sm-2"><button v-on:click="findServices()" class="col btn btn-primary" >Найти услуги</button></div>
-			<div class="col-sm-4"></div>
+			<div class="col-sm-3 border-box" id="aside1" style="margin-left:15px;">
+				<!-- {{currentBrandImgSrc}} -->
+					<p class="font-weight-bold">стоимость работ: <br>{{ work }}  &#x20bd</p>
+					<p class="font-weight-bold">стоимость запчастей: <br>{{ parts }}  &#x20bd</p>
+					<!-- <p class="font-weight-bold lead">___________________</p> -->
+					<p class="font-weight-bold lead" style="border-top:2px solid #b72a20;">Итого: {{ work + parts }}  &#x20bd</p>
+				</div>
+			<div class="col-sm-2"></div>
 		</div>
 	</div>
+<!-- </div> -->
 	<div id="services" style="margin-top:50px">
 		<!-- <p>{{ services }}</p> -->
 		<div>
 		<div v-for="s in services">
 			<div class="row">
-				<div class="col"></div>
-				<div class="col service-box">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-5 service-box">
 				<h5><label><input type="checkbox"  v-bind:id="s.id" v-bind:value="s" v-model="checkedService" v-on:change="checkChanges(s.id)">
-				{{ s.name }}   {{ s.price }}&#x20bd</label>
+				<span class="service-name" style="border-bottom:1px dashed grey">{{ s.name }}</span>   {{ "     " + s.price }}&#x20bd</span></label>
 				<small class="text-muted"><br>{{s.description}}</small></h5>
 				<div>
 					<div v-for="type in partTypesForService">
 						<!-- <p>{{ type.service_for_car_id == s.id }} </p> -->
-						<div class="row">
-							<div class="col-sm-1"></div>
-							<div class="col-sm-11">
+						<!-- <div class="row"> -->
+							<!-- <div class="col"></div> -->
+							<div>
 							<div v-if="type.service_for_car_id == s.id && checkedService.indexOf(s) != -1">
 								<h6><label><input type="checkbox" v-bind:value="type" v-model="checkedPartTypes" v-bind:id="type" v-on:click="checkChanges(s.id, type.part_type_id)">
 								{{ type.name }}</label></h6>
@@ -114,10 +135,9 @@
 						</div>
 					</div>
 				</div>
+				<div class="col-sm-5"></div>
 				</div>
-				<div class="col"></div>
 			</div> <!-- end of div row -->
-		</div>
 		</div>
 		<p>{{ checkedService }}</p>
 		<p>{{ checkedPartTypes }}</p>
@@ -125,6 +145,10 @@
 		<p>{{partTypesForService}}</p>
 		<p>{{ partsForCar }} </p> -->
 		<p>{{checkedParts}}</p>
+		</div>
+
+		<!-- <div style="height: 1000px; background-color:red">
+		</div> -->
 	</div>
 	<!-- <div id="brandModelSettings">
 		<select>
@@ -144,5 +168,49 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
 	<script src="js/app.js"></script>
+
+	<style>
+.sticky {
+  position: fixed;
+  top: 0px;  /* если ноль заменить на число (и в скрипте тоже), то блок будет прилипать до того, как верхний край окна браузера дойдёт до верхнего края элемента. Может быть отрицательным числом. Применим, например, при фиксированном сверху меню */
+  z-index: 101;
+}
+</style>
+
+<script>
+(function(){  // анонимная функция (function(){ })(), чтобы переменные "a" и "b" не стали глобальными
+var a = document.querySelector('#aside1'), b = null;  // селектор блока, который нужно закрепить
+window.addEventListener('scroll', Ascroll, false);
+document.body.addEventListener('scroll', Ascroll, false);  // если у html и body высота равна 100%
+function Ascroll() {
+  if (b == null) {  // добавить потомка-обёртку, чтобы убрать зависимость с соседями
+    var Sa = getComputedStyle(a, ''), s = '';
+    for (var i = 0; i < Sa.length; i++) {  // перечислить стили CSS, которые нужно скопировать с родителя
+      if (Sa[i].indexOf('overflow') == 0 || Sa[i].indexOf('padding') == 0 || Sa[i].indexOf('border') == 0 || Sa[i].indexOf('outline') == 0 || Sa[i].indexOf('box-shadow') == 0 || Sa[i].indexOf('background') == 0) {
+        s += Sa[i] + ': ' +Sa.getPropertyValue(Sa[i]) + '; '
+      }
+    }
+    b = document.createElement('div');  // создать потомка
+    b.style.cssText = s + ' box-sizing: border-box; width: ' + a.offsetWidth + 'px;';
+    a.insertBefore(b, a.firstChild);  // поместить потомка в цепляющийся блок первым
+    var l = a.childNodes.length;
+    for (var i = 1; i < l; i++) {  // переместить во вновь созданного потомка всех остальных потомков (итого: создан потомок-обёртка, внутри которого по прежнему работают скрипты)
+      b.appendChild(a.childNodes[1]);
+    }
+    a.style.height = b.getBoundingClientRect().height + 'px';  // если под скользящим элементом есть другие блоки, можно своё значение
+    a.style.padding = '0';
+    a.style.border = '0';  // если элементу присвоен padding или border
+  }
+  if (a.getBoundingClientRect().top <= 0) { // elem.getBoundingClientRect() возвращает в px координаты элемента относительно верхнего левого угла области просмотра окна браузера
+    b.className = 'sticky';
+  } else {
+    b.className = '';
+  }
+  window.addEventListener('resize', function() {
+    a.children[0].style.width = getComputedStyle(a, '').width
+  }, false);  // если изменить размер окна браузера, измениться ширина элемента
+}
+})()
+</script>
 </body>
 </html>
