@@ -64,8 +64,8 @@
 	</div>
 <div id="expenses">
 	<div class="row" style="margin-top:30px">
-			<div class="col-sm-3"></div>			
-			<div class="col-sm-1">
+			<div class="col-sm-2"></div>			
+			<div class="col-sm-2">
 				<img v-if="currentBrandImgSrc != null" v-bind:src="currentBrandImgSrc" class="img-fluid"></img>
 				<div v-else style="background-color: #b72a20; color:white;"><p class="font-weight-bold text-center" style="padding:15px;">Brand is not selected</p></div>
 			</div>
@@ -85,14 +85,15 @@
 			</div>
 			<!-- <div class="col-sm-1"></div> -->
 			<!-- <div class="col"></div> -->
-			<div class="col-sm-2 border-box" id="aside1">
+			
+			<div class="col-sm-3 border-box" id="aside1" style="margin-left:15px;">
 				<!-- {{currentBrandImgSrc}} -->
 					<p class="font-weight-bold">стоимость работ: <br>{{ work }}  &#x20bd</p>
 					<p class="font-weight-bold">стоимость запчастей: <br>{{ parts }}  &#x20bd</p>
 					<!-- <p class="font-weight-bold lead">___________________</p> -->
 					<p class="font-weight-bold lead" style="border-top:2px solid #b72a20;">Итого: {{ work + parts }}  &#x20bd</p>
 				</div>
-			<div class="col-sm-3"></div>
+			<div class="col-sm-2"></div>
 		</div>
 	</div>
 <!-- </div> -->
@@ -101,8 +102,8 @@
 		<div>
 		<div v-for="s in services">
 			<div class="row">
-				<div class="col"></div>
-				<div class="col service-box">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-5 service-box">
 				<h5><label><input type="checkbox"  v-bind:id="s.id" v-bind:value="s" v-model="checkedService" v-on:change="checkChanges(s.id)">
 				<span class="service-name" style="border-bottom:1px dashed grey">{{ s.name }}</span>   {{ "     " + s.price }}&#x20bd</span></label>
 				<small class="text-muted"><br>{{s.description}}</small></h5>
@@ -134,7 +135,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col"></div>
+				<div class="col-sm-5"></div>
 				</div>
 			</div> <!-- end of div row -->
 		</div>
