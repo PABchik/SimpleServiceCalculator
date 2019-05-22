@@ -36,7 +36,7 @@
 				<select v-on:change="changeModel($event)" v-model="currentModelId" class="form-control">
 					<option v-if="currentBrandId == null" disabled>Сначала выберите марку автомобиля</option>
 					<option v-else disabled>Выберите модель автомобиля</option>
-					<option v-for="model in models" v-bind:value="model.id" class="font-weight-bold"> {{ model.name }} </option>
+					<option v-for="model in models" v-bind:value="model" class="font-weight-bold"> {{ model.name }} </option>
 				</select>
 			</div>
 			<div class="col">
@@ -45,7 +45,7 @@
 					<option v-if="currentBrandId == null" disabled>Сначала выберите марку и модель вашего автомобиля</option>
 					<option v-if="currentModelId == null && currentBrandId != null" disabled>Сначала выберите модель вашего автомобиля</option>
 					<option v-else disabled>Выберите двигатель вашего автомобиля</option>
-					<option v-for="engine in engines" v-bind:value="engine.code" class="font-weight-bold"> {{ engine.name }} </option>
+					<option v-for="engine in engines" v-bind:value="engine" class="font-weight-bold"> {{ engine.name }} </option>
 				</select>
 			</div>
 			<div class="col"></div>
@@ -59,7 +59,7 @@
 		
 		<p>{{ currentModelId }} </p>
 		
-		<p>{{ currentEngineId }} </p> -->
+		<p>current engine-{{ currentEngineId }} </p> -->
 		
 	</div>
 <div id="expenses">
@@ -69,8 +69,21 @@
 				<img v-if="currentBrandImgSrc != null" v-bind:src="currentBrandImgSrc" class="img-fluid"></img>
 				<div v-else style="background-color: #b72a20; color:white;"><p class="font-weight-bold text-center" style="padding:15px;">Brand is not selected</p></div>
 			</div>
-			<div class="col-sm-3"></div>
-			<div class="col-sm-1"></div>
+			<div class="col-sm-3">
+				<h5><span class="font-weight-normal" style="margin-right:10px;"> Марка: </span>
+					<span v-if="currentBrandName != null" > {{ currentBrandName }} </span>
+					<span v-else> не выбрано </span>
+				</h5>
+				<h5><span class="font-weight-normal" style="margin-right:10px;"> Модель: </span>
+					<span v-if="currentModelName != null" > {{ currentModelName }} </span>
+					<span v-else> не выбрано </span>
+				</h5>
+				<h5><span class="font-weight-normal" style="margin-right:10px;"> Двигатель: </span>
+					<span v-if="currentEngineName != null" > {{ currentEngineName }} </span>
+					<span v-else> не выбрано </span>
+				</h5>
+			</div>
+			<!-- <div class="col-sm-1"></div> -->
 			<!-- <div class="col"></div> -->
 			<div class="col-sm-2 border-box">
 				<!-- {{currentBrandImgSrc}} -->
@@ -79,7 +92,7 @@
 					<!-- <p class="font-weight-bold lead">___________________</p> -->
 					<p class="font-weight-bold lead" style="border-top:2px solid #b72a20;">Итого: {{ work + parts }}  &#x20bd</p>
 				</div>
-			<div class="col-sm-2"></div>
+			<div class="col-sm-3"></div>
 		</div>
 	</div>
 <!-- </div> -->
