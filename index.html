@@ -11,6 +11,7 @@
 
 <body>
 	<div class="container-fluid">
+		<!-- <div class="service-box"> -->
 	<div id="nav">
 		
 		<div class="row" style="margin-top:100px;">
@@ -64,10 +65,15 @@
 <div id="expenses">
 	<div class="row" style="margin-top:30px">
 			<div class="col-sm-3"></div>			
-			<div class="col-sm-5"><!-- <button v-on:click="findServices()" class="col btn btn-primary" >Найти услуги</button> --></div>
+			<div class="col-sm-1">
+				<img v-if="currentBrandImgSrc != null" v-bind:src="currentBrandImgSrc" class="img-fluid"></img>
+				<div v-else style="background-color: #b72a20; color:white;"><p class="font-weight-bold text-center" style="padding:15px;">Brand is not selected</p></div>
+			</div>
+			<div class="col-sm-3"></div>
+			<div class="col-sm-1"></div>
 			<!-- <div class="col"></div> -->
 			<div class="col-sm-2 border-box">
-				{{currentBrandImgSrc}}
+				<!-- {{currentBrandImgSrc}} -->
 					<p class="font-weight-bold">стоимость работ: <br>{{ work }}  &#x20bd</p>
 					<p class="font-weight-bold">стоимость запчастей: <br>{{ parts }}  &#x20bd</p>
 					<!-- <p class="font-weight-bold lead">___________________</p> -->
@@ -76,6 +82,7 @@
 			<div class="col-sm-2"></div>
 		</div>
 	</div>
+<!-- </div> -->
 	<div id="services" style="margin-top:50px">
 		<!-- <p>{{ services }}</p> -->
 		<div>

@@ -86,8 +86,9 @@ var nav = new Vue({
 		},
 		changeBrand: function(event) {
 			// alert("brand changed");
-			// this.currentBrand = event.target.value;
+			this.currentBrandImgSrc = this.currentBrandId.img_src;
 			expense.currentBrandImgSrc = nav.currentBrandImgSrc;
+			// alert(nav.currentBrandImgSrc);
 			this.getModels();
 		},
 		changeModel: function(event) {
@@ -189,7 +190,7 @@ var serv = new Vue({
 			if (partTypeId != null) {
 				serv.checkedParts.forEach(function(item, i) {
 					if (item.service_for_car_id == serviceForCarId && item.part_type_id == partTypeId) {
-						alert('good');
+						// alert('good');
 						serv.checkedParts.splice(i, 1);
 						serv.checkChanges(serviceForCarId, partTypeId);
 					}
