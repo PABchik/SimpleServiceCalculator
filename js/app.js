@@ -74,6 +74,7 @@ var nav = new Vue({
 				nav.currentModelId = null;
 				expense.currentModelName = null;
 				nav.engines = null;
+				expense.currentEngineName = null;
 				nav.models = result;
 			})
 		},
@@ -92,17 +93,20 @@ var nav = new Vue({
 			this.currentBrandImgSrc = this.currentBrandId.img_src;
 			expense.currentBrandImgSrc = nav.currentBrandImgSrc;
 			expense.currentBrandName = nav.currentBrandId.name;
-			// alert(nav.currentBrandImgSrc);
-			nav.findServices();
+			// alert(nav.checkedParts);
+			serv.clearChecked();
+			expense.calc();
 			this.getModels();
 		},
 		changeModel: function(event) {
 			// alert("ch mod");
 			// this.currentModel = event.target.value;
 			this.currentEngineId = null;
-			expense.currentModelName = nav.currentModelId.name;
+			if (nav.currentModelId != null){
+				expense.currentModelName = nav.currentModelId.name;
+				this.getEngines();
+			}
 			nav.findServices();
-			this.getEngines();
 		},
 		findServices: function() {
 			// alert("findServices ");
@@ -140,6 +144,7 @@ var serv = new Vue({
 	methods: {
 		findServices: function() {
 			// alert('../php/main.php?fun=findServices&brand='+nav.currentBrandId.id+'&model='+nav.currentModelId.id +'&engine='+nav.currentEngineId.code);
+			this.clearChecked();
 			if (nav.currentEngineId != null &&
 				nav.currentBrandId != null &&
 				nav.currentModelId != null) {
@@ -147,9 +152,8 @@ var serv = new Vue({
 				var result = JSON.stringify(response.data);
 				result = JSON.parse(result);
 				// alert(result);
-				serv.checkedService = [];
-				serv.checkedPartTypes = [];
-				serv.checkedParts = [];
+				
+
 				serv.services = result;
 				serv.partTypesForService = [];
 				/*serv.services.forEach(function(item, i) {
@@ -164,6 +168,11 @@ var serv = new Vue({
 			}
 				
 				// alert("cur model will be null");
+		},
+		clearChecked: function() {
+			serv.checkedService = [];
+				serv.checkedPartTypes = [];
+				serv.checkedParts = [];
 		},
 		getPartTypesForService: function() {
 			
@@ -250,15 +259,17 @@ var expense = new Vue({
 		calc: function() {
 			expense.work = 0;
 			expense.parts = 0;
-			// var checkedServicesWithPrice = [];
-			serv.checkedService.forEach(function(item) {
-				// alert(item);
-				expense.work += Number(item.price);
-			});
-			serv.checkedParts.forEach(function(item) {
-				expense.parts += Number(item.price) * Number(item.count);
-			});
-			// alert("calc");
+			if (serv.checkedService != null && serv.checkedParts != null) {
+				// var checkedServicesWithPrice = [];
+				serv.checkedService.forEach(function(item) {
+					// alert(item);
+					expense.work += Number(item.price);
+				});
+				serv.checkedParts.forEach(function(item) {
+					expense.parts += Number(item.price) * Number(item.count);
+				});
+				// alert("calc");
+			} 
 
 		},
 		addPart: function(part) {
