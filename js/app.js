@@ -16,10 +16,10 @@ var app = new Vue({
 			this.v = axios.get("../php/main.php?entity=test_table").then(response => {app.v = response.data;});
 		},
 		getImgSrc: function() {
-			alert("getImgSrc");
+			// alert("getImgSrc");
 			axios.get('../php/main.php?entity=brand').then(function(response) {
 				var result = JSON.stringify(response.data);
-				alert(result);
+				// alert(result);
 				result = JSON.parse(result);
 				this.logos = result;
 			});
@@ -102,6 +102,9 @@ var nav = new Vue({
 			// alert("ch mod");
 			// this.currentModel = event.target.value;
 			this.currentEngineId = null;
+			// alert("ch md");
+			serv.clearChecked();
+			expense.calc();
 			if (nav.currentModelId != null){
 				expense.currentModelName = nav.currentModelId.name;
 				this.getEngines();
@@ -170,6 +173,7 @@ var serv = new Vue({
 				// alert("cur model will be null");
 		},
 		clearChecked: function() {
+			// alert("cl checked");
 			serv.checkedService = [];
 				serv.checkedPartTypes = [];
 				serv.checkedParts = [];
@@ -259,7 +263,7 @@ var expense = new Vue({
 		calc: function() {
 			expense.work = 0;
 			expense.parts = 0;
-			if (serv.checkedService != null && serv.checkedParts != null) {
+			if (serv.checkedService != [] && serv.checkedParts != []) {
 				// var checkedServicesWithPrice = [];
 				serv.checkedService.forEach(function(item) {
 					// alert(item);
