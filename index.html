@@ -1,5 +1,12 @@
 <html>
    <head>
+    <style>
+         .sticky {
+         position: fixed;
+         top: 0px;  /* если ноль заменить на число (и в скрипте тоже), то блок будет прилипать до того, как верхний край окна браузера дойдёт до верхнего края элемента. Может быть отрицательным числом. Применим, например, при фиксированном сверху меню */
+         z-index: 101;
+         }
+      </style>
       <!-- Required meta tags -->
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -24,7 +31,7 @@
                   <h5 class="text-center">Марка</h5>
                   <select v-on:change="changeBrand($event)" v-model="currentBrandId" class="form-control">
                      <option v-if="currentBrandId == null" disabled>Выберите марку автомобиля</option>
-                     <option v-for="brand in brands" v-bind:value="brand" placeholder="Выберите марку автомобиля" class="font-weight-bold"> {{ brand.name }} </option>
+                     <option v-for="brand in brands" v-bind:value="brand" class="font-weight-bold"> {{ brand.name }} </option>
                   </select>
                </div>
                <div class="col">
@@ -58,7 +65,7 @@
             <div class="row" style="margin-top:50px">
                <div class="col-sm-2"></div>
                <div class="col-sm-2">
-                  <img v-if="currentBrandImgSrc != null" v-bind:src="currentBrandImgSrc" class="img-fluid"></img>
+                  <img v-if="currentBrandImgSrc != null" v-bind:src="currentBrandImgSrc" class="img-fluid">
                   <div v-else style="background-color: #b72a20; color:white;">
                      <p class="font-weight-bold text-center" style="padding:15px;">Brand is not selected</p>
                   </div>
@@ -81,10 +88,10 @@
                <!-- <div class="col"></div> -->
                <div class="col-sm-3 border-box" id="aside1" style="margin-left:15px;">
                   <!-- {{currentBrandImgSrc}} -->
-                  <p class="font-weight-bold">стоимость работ: <br>{{ work }}  &#x20bd</p>
-                  <p class="font-weight-bold">стоимость запчастей: <br>{{ parts }}  &#x20bd</p>
+                  <p class="font-weight-bold">стоимость работ: <br>{{ work }}  &#x20bd;</p>
+                  <p class="font-weight-bold">стоимость запчастей: <br>{{ parts }}  &#x20bd;</p>
                   <!-- <p class="font-weight-bold lead">___________________</p> -->
-                  <p class="font-weight-bold lead" style="border-top:2px solid #b72a20;">Итого: {{ work + parts }}  &#x20bd</p>
+                  <p class="font-weight-bold lead" style="border-top:2px solid #b72a20;">Итого: {{ work + parts }}  &#x20bd;</p>
                </div>
                <div class="col-sm-2"></div>
             </div>
@@ -98,7 +105,7 @@
                      <div class="col-sm-2"></div>
                      <div class="col-sm-5 service-box">
                         <h5><label><input type="checkbox"  v-bind:id="s.id" v-bind:value="s" v-model="checkedService" v-on:change="checkChanges(s.id)">
-                           <span class="service-name" style="border-bottom:1px dashed grey">{{ s.name }}</span>   {{ "     " + s.price }}&#x20bd</span></label>
+                           <span class="service-name" style="border-bottom:1px dashed grey">{{ s.name }}</span>   {{ "     " + s.price }}&#x20bd;</label>
                            <small class="text-muted"><br>{{s.description}}</small>
                         </h5>
                         <div>
@@ -114,14 +121,14 @@
                                     <div>
                                        <div v-for="part in partsForCar">
                                           <!-- <p>{{part.name}}  {{part}}</p> -->
-                                          <div class="row">
-                                             <div class="col-sm-1"></div>
-                                             <div class="col-sm-11">
+                                          <!-- <div class="row"> -->
+                                             <!-- <div class="col-sm-1"></div> -->
+                                             <!-- <div class="col-sm-11"> -->
                                                 <div v-if="part.part_type_id == type.id && part.service_for_car_id == s.id && checkedPartTypes.indexOf(type) != -1">
-                                                   <label><input type="radio" v-bind:name="part.part_type_id" v-bind:value="part" v-on:click="addPart(part)" >{{part.name}}	{{ part.price * part.count}} &#x20bd</label>
+                                                   <label><input type="radio" v-bind:name="part.part_type_id" v-bind:value="part" v-on:click="addPart(part)" >{{part.name}}	{{ part.price * part.count}} &#x20bd;</label>
                                                 </div>
-                                             </div>
-                                          </div>
+                                             <!-- </div> -->
+                                          <!-- </div> -->
                                        </div>
                                     </div>
                                  </div>
@@ -133,14 +140,14 @@
                      <div class="col-sm-5"></div>
                   </div>
                </div>
-               <!-- <div class="row" v-if="services != null">
+               <div class="row">
                   <div class="col-sm-2"></div>
                   <div class="col-sm-5 service-box">
                      <label>Пожалуйста, укажите VIN номер вашего автомобиля, чтобы наши сотрудники могли еще раз все перепроверить</label>
-                     <textarea name="comments" class="form-control">
+                     <textarea name="comments" class="form-control"></textarea>
                   </div>
                   <div class="col-sm-5"></div>
-               </div> -->
+               </div>
                <!--
                   <div class="row" v-if="services != null">
                   	<div class="col-sm-2"></div>
@@ -161,7 +168,7 @@
                   </div>
                   <p>{{ checkedService }}</p>
                   <p>{{ checkedPartTypes }}</p>
-                  <!-- p>{{services}}</p>
+                  <!- p>{{services}}</p>
                   <p>{{partTypesForService}}</p>
                   <p>{{ partsForCar }} </p> -->
                <!-- <p>{{checkedParts}}</p> -->
@@ -187,13 +194,7 @@
       <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
       <script src="js/app.js"></script>
-      <style>
-         .sticky {
-         position: fixed;
-         top: 0px;  /* если ноль заменить на число (и в скрипте тоже), то блок будет прилипать до того, как верхний край окна браузера дойдёт до верхнего края элемента. Может быть отрицательным числом. Применим, например, при фиксированном сверху меню */
-         z-index: 101;
-         }
-      </style>
+      
       <script>
          (function(){  // анонимная функция (function(){ })(), чтобы переменные "a" и "b" не стали глобальными
          var a = document.querySelector('#aside1'), b = null;  // селектор блока, который нужно закрепить
