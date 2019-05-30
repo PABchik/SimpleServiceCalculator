@@ -6,40 +6,28 @@ require_once 'DBHelper.php';
 header('Content-Type: application/json');
 $db = new DBHelper($host, $user, $password, $database);
 
-if (!empty($_GET) && count($_GET) == 1 && !empty($_GET['entity'])) {
-    // echo "0";
-	$result = $db->getQuery("select * from ".$_GET['entity']);
-	if (!empty($result)) {
-		echo json_encode($result);
-	}
-} elseif(!empty($_GET['fun'])) {
+    if(!empty($_GET['fun'])) {
     // echo "1";
     // echo ($_GET['fun']);
     switch($_GET['fun']) {
-        case "findById":
-        // echo "3"; 
-            if (!empty($_GET['id']) && !empty($_GET['entity'])) {
-                // echo "4";
-
-                if (!empty($_GET['relatedEntity'])){
-                    if (!empty($_GET['join']) && !empty($_GET['on'])) {
-                        /*echo "select * from ".$_GET['entity']." left join ".$_GET['join']." on ".$_GET['join'].".".$_GET['on']."=".$_GET['entity'].".".$_GET['join']."_id where ".$_GET['entity'].".".$_GET['relatedEntity']."_id=".$_GET['id'];*/
-                        $result = $db->getQuery("select * from ".$_GET['entity']." left join ".$_GET['join']." on ".$_GET['join'].".".$_GET['on']."=".$_GET['entity'].".".$_GET['join']."_id where ".$_GET['entity'].".".$_GET['relatedEntity']."_id=".$_GET['id']);
-                    } else {
-                        $result = $db->getQuery("select * from ".$_GET['entity']." where ".$_GET['relatedEntity']."_id = ".$_GET[id]);
-                    }
-                    // echo "5";
-                    // echo "\n";
-                    // echo "select * from ".$_GET['entity']." where ".$_GET['relatedEntity']."_id == ".$_GET[id];
-                    // echo "\n";
-                } 
-                else {
-                    // echo "6";
-                    $result = $db -> getQuery("select * from ".$_GET['entity']." where id = ".$_GET[id]);
-                }
-                // echo "7";
-                
-            }
+        case "getBrands":
+                $result = $db -> getQuery("select * from brand order by name");
+            break;
+        case "getModels":
+            if (isset($_GET['brand']))
+                $result = $db -> getQuery("select * from model where brand_id=".$_GET['brand'].' order by name'); 
+            break;
+        case "getEngines":
+            if (isset($_GET['brand']) && isset($_GET['model']))
+                $result = $db -> getQuery("select
+                    engine.name, 
+                    engine.code 
+                    from engine
+                join model_engine on model_engine.model_id
+                join engine on engine.code = model_engine.engine_id 
+                where model.brand_id=".$_GET['brand']." and 
+                model.id = ".$_GET['model']." order by engine.name"); 
+            //select engine.name, engine.code from model join engine_model on engine_model.model_id join engine on engine.code = engine_model.engine_id where model.brand_id=1 and model.id = 1 order by engine.name
             break;
         case "findServices":
             if (!empty($_GET['brand']) && !empty($_GET['model']) && !empty($_GET['engine'])) {
@@ -107,7 +95,8 @@ if (!empty($_GET) && count($_GET) == 1 && !empty($_GET['entity'])) {
                     where cp.brand_id=".
                     $_GET['brand']." and cp.model_id=".
                     $_GET['model']." and cp.engine_id='".
-                    $_GET['engine']."'");
+                    $_GET['engine']."'
+                    order by part.name");
         break;
             // }
     }

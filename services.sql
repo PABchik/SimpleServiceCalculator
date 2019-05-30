@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Май 23 2019 г., 10:59
+-- Время создания: Май 30 2019 г., 20:58
 -- Версия сервера: 5.6.41
 -- Версия PHP: 5.5.38
 
@@ -124,19 +124,20 @@ INSERT INTO `engine_model` (`id`, `engine_id`, `model_id`) VALUES
 CREATE TABLE `model` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `brand_id` int(11) NOT NULL
+  `brand_id` int(11) NOT NULL,
+  `img_src` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `model`
 --
 
-INSERT INTO `model` (`id`, `name`, `brand_id`) VALUES
-(1, '5 series', 1),
-(2, '7 series', 1),
-(3, 'Q5', 2),
-(4, 'Q7', 2),
-(5, '3 series', 1);
+INSERT INTO `model` (`id`, `name`, `brand_id`, `img_src`) VALUES
+(1, '5 series', 1, 'img/model_bmw_5_series.jpg'),
+(2, '7 series', 1, 'img/model_bmw_7_series.jpg'),
+(3, 'Q5', 2, 'img/model_audi_Q5.jpg'),
+(4, 'Q7', 2, 'img/model_audi_Q7.jpg'),
+(5, '3 series', 1, 'img/model_bmw_3_series.jpg');
 
 -- --------------------------------------------------------
 
