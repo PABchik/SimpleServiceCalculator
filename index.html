@@ -29,24 +29,24 @@
                <div class="col"></div>
                <div class="col">
                   <h5 class="text-center">Марка</h5>
-                  <select v-on:change="changeBrand($event)" v-model="currentBrandId" class="form-control">
-                     <option v-if="currentBrandId == null" disabled>Выберите марку автомобиля</option>
+                  <select v-on:change="changeBrand($event)" v-model="currentBrand" class="form-control">
+                     <option v-if="currentBrand == null" disabled>Выберите марку автомобиля</option>
                      <option v-for="brand in brands" v-bind:value="brand" class="font-weight-bold"> {{ brand.name }} </option>
                   </select>
                </div>
                <div class="col">
                   <h5 class="text-center">Модель</h5>
-                  <select v-on:change="changeModel($event)" v-model="currentModelId" class="form-control">
-                     <option v-if="currentBrandId == null" disabled>Сначала выберите марку автомобиля</option>
+                  <select v-on:change="changeModel($event)" v-model="currentModel" class="form-control">
+                     <option v-if="currentBrand == null" disabled>Сначала выберите марку автомобиля</option>
                      <option v-else disabled>Выберите модель автомобиля</option>
                      <option v-for="model in models" v-bind:value="model" class="font-weight-bold"> {{ model.name }} </option>
                   </select>
                </div>
                <div class="col">
                   <h5 class="text-center">Двигатель</h5>
-                  <select v-model="currentEngineId" class="form-control" v-on:change="findServices()">
-                     <option v-if="currentBrandId == null" disabled>Сначала выберите марку и модель вашего автомобиля</option>
-                     <option v-if="currentModelId == null && currentBrandId != null" disabled>Сначала выберите модель вашего автомобиля</option>
+                  <select v-model="currentEngine" class="form-control" v-on:change="findServices()">
+                     <option v-if="currentBrand == null" disabled>Сначала выберите марку и модель вашего автомобиля</option>
+                     <option v-if="currentModel == null && currentBrand != null" disabled>Сначала выберите модель вашего автомобиля</option>
                      <option v-else disabled>Выберите двигатель вашего автомобиля</option>
                      <option v-for="engine in engines" v-bind:value="engine" class="font-weight-bold"> {{ engine.name }} </option>
                   </select>
@@ -86,12 +86,12 @@
                </div>
                <div class="col-sm-2"></div>
             </div>
-            <!-- <p>{{ currentBrandId }}</p>
+            <!-- <p>{{ currentBrand }}</p>
                <p>{{ brands }}</p>
                
-               <p>{{ currentModelId }} </p>
+               <p>{{ currentModel }} </p>
                
-               <p>current engine-{{ currentEngineId }} </p> -->
+               <p>current engine-{{ currentEngine }} </p> -->
          </div>
          <div id="expenses">
           <div class="row">

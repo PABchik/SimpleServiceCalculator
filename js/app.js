@@ -2,9 +2,9 @@
 var nav = new Vue({
 	el:'#nav',
 	data: {
-		currentBrandId: null,
-		currentModelId: null,
-		currentEngineId: null,
+		currentBrand: null,
+		currentModel: null,
+		currentEngine: null,
 		brands: null,
 		models: null,
 		engines: null,
@@ -23,10 +23,10 @@ var nav = new Vue({
 			})
 		},
 		getModels: function() {
-			axios.get('../php/main.php?fun=getModels&brand='+this.currentBrandId.id).then(function(response) {
+			axios.get('../php/main.php?fun=getModels&brand='+this.currentBrand.id).then(function(response) {
 				var result = JSON.stringify(response.data);
 				result = JSON.parse(result);
-				nav.currentModelId = null;
+				nav.currentModel = null;
 				nav.currentModelName = null;
 				nav.currentModelImgSrc = null;
 				nav.engines = null;
@@ -35,35 +35,35 @@ var nav = new Vue({
 			})
 		},
 		getEngines: function() {
-			axios.get('../php/main.php?fun=getEngines&model='+nav.currentModelId.id).then(function(response) {
+			axios.get('../php/main.php?fun=getEngines&model='+nav.currentModel.id).then(function(response) {
 				var result = JSON.stringify(response.data);
 				result = JSON.parse(result);
-				nav.currentEngineId = null;
+				nav.currentEngine = null;
 				nav.currentEngineName = null;
 				nav.engines = result;
 			})
 		},
 		changeBrand: function(event) {
-			this.currentBrandImgSrc = this.currentBrandId.img_src;
-			nav.currentBrandName = nav.currentBrandId.name;
+			this.currentBrandImgSrc = this.currentBrand.img_src;
+			nav.currentBrandName = nav.currentBrand.name;
 			serv.clearChecked();
 			expense.calc();
 			this.getModels();
 		},
 		changeModel: function(event) {
-			this.currentEngineId = null;
+			this.currentEngine = null;
 			serv.clearChecked();
 			expense.calc();
-			if (nav.currentModelId != null){
-				nav.currentModelName = nav.currentModelId.name;
-				nav.currentModelImgSrc = nav.currentModelId.img_src;
+			if (nav.currentModel != null){
+				nav.currentModelName = nav.currentModel.name;
+				nav.currentModelImgSrc = nav.currentModel.img_src;
 				this.getEngines();
 			}
 			nav.findServices();
 		},
 		findServices: function() {
-			if (this.currentBrandId != null && this.currentModelId != null && this.currentEngineId != null) {
-				nav.currentEngineName = this.currentEngineId.name;
+			if (this.currentBrand != null && this.currentModel != null && this.currentEngine != null) {
+				nav.currentEngineName = this.currentEngine.name;
 				serv.findServices();
 			}
 			else {
@@ -88,10 +88,10 @@ var serv = new Vue({
 	methods: {
 		findServices: function() {
 			this.clearChecked();
-			if (nav.currentEngineId != null &&
-				nav.currentBrandId != null &&
-				nav.currentModelId != null) {
-			axios.get('../php/main.php?fun=findServices&brand='+nav.currentBrandId.id+'&model='+nav.currentModelId.id +'&engine='+nav.currentEngineId.code).then(function(response) {
+			if (nav.currentEngine != null &&
+				nav.currentBrand != null &&
+				nav.currentModel != null) {
+			axios.get('../php/main.php?fun=findServices&brand='+nav.currentBrand.id+'&model='+nav.currentModel.id +'&engine='+nav.currentEngine.code).then(function(response) {
 				var result = JSON.stringify(response.data);
 				result = JSON.parse(result);
 				serv.services = result;
@@ -117,9 +117,9 @@ var serv = new Vue({
 				})
 			},
 		getPartsForCar:function() {
-			axios.get('../php/main.php?fun=getPartsForCar&brand=' + nav.currentBrandId.id +
-				'&model=' + nav.currentModelId.id + '&engine='+
-				nav.currentEngineId.code).then(function(response) {
+			axios.get('../php/main.php?fun=getPartsForCar&brand=' + nav.currentBrand.id +
+				'&model=' + nav.currentModel.id + '&engine='+
+				nav.currentEngine.code).then(function(response) {
 					var result = JSON.stringify(response.data);
 					result = JSON.parse(result);
 					serv.partsForCar=result;
