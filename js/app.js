@@ -42,6 +42,7 @@ var nav = new Vue({
 			})
 		},
 		getEngines: function() {
+			alert('../php/main.php?fun=getEngines&brand=' + nav.currentBrandId.id + '&model='+nav.currentModelId.id);
 			axios.get('../php/main.php?fun=getEngines&brand=' + nav.currentBrandId.id + '&model='+nav.currentModelId.id).then(function(response) {
 				var result = JSON.stringify(response.data);
 				result = JSON.parse(result);

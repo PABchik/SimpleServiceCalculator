@@ -19,7 +19,15 @@ $db = new DBHelper($host, $user, $password, $database);
             break;
         case "getEngines":
             if (isset($_GET['brand']) && isset($_GET['model']))
-                $result = $db -> getQuery("select * from model where brand_id=".$_GET['brand'].' order by name'); 
+                $result = $db -> getQuery("select
+                    engine.name, 
+                    engine.code 
+                    from engine
+                join model_engine on model_engine.model_id
+                join engine on engine.code = model_engine.engine_id 
+                where model.brand_id=".$_GET['brand']." and 
+                model.id = ".$_GET['model']." order by engine.name"); 
+            //select engine.name, engine.code from model join engine_model on engine_model.model_id join engine on engine.code = engine_model.engine_id where model.brand_id=1 and model.id = 1 order by engine.name
             break;
         case "findServices":
             if (!empty($_GET['brand']) && !empty($_GET['model']) && !empty($_GET['engine'])) {
@@ -87,7 +95,8 @@ $db = new DBHelper($host, $user, $password, $database);
                     where cp.brand_id=".
                     $_GET['brand']." and cp.model_id=".
                     $_GET['model']." and cp.engine_id='".
-                    $_GET['engine']."'");
+                    $_GET['engine']."'
+                    order by part.name");
         break;
             // }
     }
