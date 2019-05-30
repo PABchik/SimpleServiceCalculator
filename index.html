@@ -102,6 +102,13 @@
                   <p class="font-weight-bold">стоимость запчастей: <br>{{ parts }}  &#x20bd;</p>
                   <!-- <p class="font-weight-bold lead">___________________</p> -->
                   <p class="font-weight-bold lead" style="border-top:2px solid #b72a20;">Итого: {{ work + parts }}  &#x20bd;</p>
+                  <div class="row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-10">
+                      <a href="#form" v-if="work + parts > 0"><button type="button" class="btn btn-danger" style="backround:#b72a20;">ЗАКАЗАТЬ ТО!</button></a>
+                    </div>
+                    <div class="col-sm-2"></div>
+                  </div>
             </div>
             <div class="col-sm-2"></div>
           </div>
@@ -150,16 +157,7 @@
                      <div class="col-sm-5"></div>
                   </div>
                </div>
-               <div class="row">
-                  <div class="col-sm-2"></div>
-                  <div class="col-sm-5 service-box">
-                     <label>Пожалуйста, укажите VIN номер вашего автомобиля, чтобы наши сотрудники могли еще раз все перепроверить</label>
-                     <input type="text" placeholder="Введите ваш VIN">
-                     <label>Пожалуйста, укажите дополнительные пожелания и мы постараемся их исполнить</label>
-                     <textarea name="comments" class="form-control" placeholder="Дополнительные комментарии"></textarea>
-                  </div>
-                  <div class="col-sm-5"></div>
-               </div>
+               
                <!--
                   <div class="row" v-if="services != null">
                   	<div class="col-sm-2"></div>
@@ -188,6 +186,19 @@
             <!-- <div style="height: 1000px; background-color:red">
                </div> -->
          </div>
+         <a href="form"></a>
+         <div id="form">
+                <div class="row" style="margin-top: 50px;">
+                  <div class="col-sm-2"></div>
+                  <div class="col-sm-5 form-box">
+                     <label>Пожалуйста, укажите VIN номер вашего автомобиля, чтобы наши сотрудники могли еще раз все перепроверить</label>
+                     <input type="text" placeholder="Введите ваш VIN">
+                     <label>Пожалуйста, укажите дополнительные пожелания и мы постараемся их исполнить</label>
+                     <textarea name="comments" class="form-control" placeholder="Дополнительные комментарии"></textarea>
+                  </div>
+                  <div class="col-sm-5"></div>
+               </div>
+          </div>
          <!-- <div id="brandModelSettings">
             <select>
             	<option v-for="logo in logos">{{ logo.img_src }}</option>

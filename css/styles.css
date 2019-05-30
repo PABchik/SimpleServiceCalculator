@@ -1,6 +1,7 @@
 .border-box {
 	border: 2px solid #cac9c9;
 	border-radius: 6px;
+	padding: 15px;
 }
 .service-box {
 	border: 5px solid #e8e8e8;
@@ -11,4 +12,11 @@
 
 .service-name {
 	color: #b72a20;
+}
+
+.form-box {
+	border: 4px solid #cac9c9;
+	border-radius: 6px;	
+	padding: 15px;
+	margin-bottom: 100px;
 }

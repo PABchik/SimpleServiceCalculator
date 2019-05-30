@@ -211,7 +211,6 @@ var serv = new Vue({
 var expense = new Vue({
 	el: '#expenses',
 	data: {
-		v: "asdassasd",
 		work: 0,
 		parts: 0,
 		
