@@ -1,47 +1,4 @@
 
-
-var app = new Vue({
-    el: '#brandModelSettings',
-    data: {
-		brands: null,
-		id: 111,
-		v: null,
-		logos: null
-    },
-	methods: {
-		inc: function() {
-			this.v = "my test";
-		},
-		getDataFromDB: function() {
-			this.v = axios.get("../php/main.php?entity=test_table").then(response => {app.v = response.data;});
-		},
-		getImgSrc: function() {
-			// alert("getImgSrc");
-			axios.get('../php/main.php?entity=brand').then(function(response) {
-				var result = JSON.stringify(response.data);
-				// alert(result);
-				result = JSON.parse(result);
-				this.logos = result;
-			});
-		}
-	}
-});
-
-// axios.get("../php/main.php?entity=test_table").then(response => {app.v = response.data;});
-app.getDataFromDB();
-			axios.get('../php/main.php?entity=brand').then(function(response) {
-				var result = JSON.stringify(response.data);
-				result = JSON.parse(result);
-				app.logos = result;
-});
-// axios.get('../php/main.php?entity=brand').then(response => {app.v = response.data;});	
-//axios.get('../php/main.php?entity=brand').then(response => {app.brands = response.data;});
-/*axios.get('../php/main.php?entity=brand').then(function(response) {
-	var result = JSON.stringify(response.data);
-	result = JSON.parse(result);
-	app.brands = result;
-});*/
-
 var nav = new Vue({
 	el:'#nav',
 	data: {
@@ -50,7 +7,12 @@ var nav = new Vue({
 		currentEngineId: null,
 		brands: null,
 		models: null,
-		engines: null
+		engines: null,
+		currentBrandImgSrc: null,
+		currentModelImgSrc: null,
+		currentBrandName: null,
+		currentModelName: null,
+		currentEngineName: null
 	},
 	methods: {
 		getBrands: function() {
@@ -72,9 +34,10 @@ var nav = new Vue({
 				result = JSON.parse(result);
 				// alert("cur model will be null");
 				nav.currentModelId = null;
-				expense.currentModelName = null;
+				nav.currentModelName = null;
+				nav.currentModelImgSrc = null;
 				nav.engines = null;
-				expense.currentEngineName = null;
+				nav.currentEngineName = null;
 				nav.models = result;
 			})
 		},
@@ -84,15 +47,15 @@ var nav = new Vue({
 				result = JSON.parse(result);
 				// alert("cur model will be null");
 				nav.currentEngineId = null;
-				expense.currentEngineName = null;
+				nav.currentEngineName = null;
 				nav.engines = result;
 			})
 		},
 		changeBrand: function(event) {
 			// alert("brand changed");
 			this.currentBrandImgSrc = this.currentBrandId.img_src;
-			expense.currentBrandImgSrc = nav.currentBrandImgSrc;
-			expense.currentBrandName = nav.currentBrandId.name;
+			// alert(nav.currentBrandId.name);
+			nav.currentBrandName = nav.currentBrandId.name;
 			// alert(nav.checkedParts);
 			serv.clearChecked();
 			expense.calc();
@@ -106,7 +69,8 @@ var nav = new Vue({
 			serv.clearChecked();
 			expense.calc();
 			if (nav.currentModelId != null){
-				expense.currentModelName = nav.currentModelId.name;
+				nav.currentModelName = nav.currentModelId.name;
+				nav.currentModelImgSrc = nav.currentModelId.img_src;
 				this.getEngines();
 			}
 			nav.findServices();
@@ -115,7 +79,7 @@ var nav = new Vue({
 			// alert("findServices ");
 			if (this.currentBrandId != null && this.currentModelId != null && this.currentEngineId != null) {
 				// alert("true in fs");
-				expense.currentEngineName = this.currentEngineId.name;
+				nav.currentEngineName = this.currentEngineId.name;
 				serv.findServices();
 			}
 			else {
@@ -250,10 +214,7 @@ var expense = new Vue({
 		v: "asdassasd",
 		work: 0,
 		parts: 0,
-		currentBrandImgSrc: null,
-		currentBrandName: null,
-		currentModelName: null,
-		currentEngineName: null
+		
 	},
 	methods: {
 		findServices: function() {

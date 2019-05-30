@@ -54,14 +54,6 @@
                <div class="col"></div>
                <!-- <div class="col"></div> -->
             </div>
-            <!-- <p>{{ currentBrandId }}</p>
-               <p>{{ brands }}</p>
-               
-               <p>{{ currentModelId }} </p>
-               
-               <p>current engine-{{ currentEngineId }} </p> -->
-         </div>
-         <div id="expenses">
             <div class="row" style="margin-top:50px">
                <div class="col-sm-2"></div>
                <div class="col-sm-2">
@@ -86,15 +78,33 @@
                </div>
                <!-- <div class="col-sm-1"></div> -->
                <!-- <div class="col"></div> -->
-               <div class="col-sm-3 border-box" id="aside1" style="margin-left:15px;">
+               <div class="col-sm-2">
+                  <img v-if="currentModelImgSrc != null" v-bind:src="currentModelImgSrc" class="img-fluid" style="margin-bottom: 15px;">
+                  <div v-else style="background-color: #b72a20; color:white;">
+                     <p class="font-weight-bold text-center" style="padding:15px;">Model is not selected</p>
+                  </div>
+               </div>
+               <div class="col-sm-2"></div>
+            </div>
+            <!-- <p>{{ currentBrandId }}</p>
+               <p>{{ brands }}</p>
+               
+               <p>{{ currentModelId }} </p>
+               
+               <p>current engine-{{ currentEngineId }} </p> -->
+         </div>
+         <div id="expenses">
+          <div class="row">
+            <div class="col-sm-7"></div>
+            <div class="col-sm-3 border-box" id="aside1">
                   <!-- {{currentBrandImgSrc}} -->
                   <p class="font-weight-bold">стоимость работ: <br>{{ work }}  &#x20bd;</p>
                   <p class="font-weight-bold">стоимость запчастей: <br>{{ parts }}  &#x20bd;</p>
                   <!-- <p class="font-weight-bold lead">___________________</p> -->
                   <p class="font-weight-bold lead" style="border-top:2px solid #b72a20;">Итого: {{ work + parts }}  &#x20bd;</p>
-               </div>
-               <div class="col-sm-2"></div>
             </div>
+            <div class="col-sm-2"></div>
+          </div>
          </div>
          <!-- </div> -->
          <div id="services" style="margin-top:50px">
