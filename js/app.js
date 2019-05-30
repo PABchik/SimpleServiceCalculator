@@ -17,7 +17,7 @@ var nav = new Vue({
 	methods: {
 		getBrands: function() {
 			// alert('../php/main.php?entity=brand');
-			axios.get('../php/main.php?entity=brand').then(function(response) {
+			axios.get('../php/main.php?fun=getBrands').then(function(response) {
 				var result = JSON.stringify(response.data);
 				result = JSON.parse(result);
 				nav.brands = result;
@@ -29,7 +29,7 @@ var nav = new Vue({
 			// alert(this.currentBrand);
 			// alert("getModels()");
 			// alert('../php/main.php?fun=findById&entity=model&id='+this.currentBrand+'&relatedEntity=brand');
-			axios.get('../php/main.php?fun=findById&entity=model&id='+this.currentBrandId.id+'&relatedEntity=brand').then(function(response) {
+			axios.get('../php/main.php?fun=getModels&brand='+this.currentBrandId.id).then(function(response) {
 				var result = JSON.stringify(response.data);
 				result = JSON.parse(result);
 				// alert("cur model will be null");
@@ -42,7 +42,7 @@ var nav = new Vue({
 			})
 		},
 		getEngines: function() {
-			axios.get('../php/main.php?fun=findById&entity=engine_model&join=engine&on=code&relatedEntity=model&id='+this.currentModelId.id).then(function(response) {
+			axios.get('../php/main.php?fun=getEngines&brand=' + nav.currentBrandId.id + '&model='+nav.currentModelId.id).then(function(response) {
 				var result = JSON.stringify(response.data);
 				result = JSON.parse(result);
 				// alert("cur model will be null");
