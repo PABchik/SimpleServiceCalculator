@@ -145,10 +145,15 @@
                 <div class="row" style="margin-top: 50px;">
                   <div class="col-sm-2"></div>
                   <div class="col-sm-5 form-box">
+                  	 <label>Укажите Ваше имя</label>
+                  	 <input type="text" name="name" v-model="name" placeholder="Ваше Имя">
                      <label>Пожалуйста, укажите VIN номер вашего автомобиля, чтобы наши сотрудники могли еще раз все перепроверить</label>
-                     <input type="text" placeholder="Введите ваш VIN">
+                     <input type="text" placeholder="Введите ваш VIN" v-model="vin">
                      <label>Пожалуйста, укажите дополнительные пожелания и мы постараемся их исполнить</label>
-                     <textarea name="comments" class="form-control" placeholder="Дополнительные комментарии"></textarea>
+                     <textarea name="comments" class="form-control" placeholder="Дополнительные комментарии" v-model="dopInfo"></textarea>
+                     <div style="margin:20px auto;">
+               			<button type="button" v-on:click="sendMail()" class="btn btn-danger">Записаться на ТО!</button>
+               		 </div>
                   </div>
                   <div class="col-sm-5"></div>
                </div>

@@ -54,7 +54,6 @@ var nav = new Vue({
 				nav.currentModelImgSrc = nav.currentModel.img_src;
 				this.getEngines();
 			}
-			nav.findServices();
 		},
 		changeEngine: function() {
 			if (this.currentBrand != null && this.currentModel != null && this.currentEngine != null) {
@@ -194,6 +193,25 @@ var expense = new Vue({
 					expense.parts += Number(item.price) * Number(item.count);
 				});
 			} 
-		}//,		addPart: function(part) 
+		}
+	}
+});
+
+
+var form = new Vue({
+	el: '#form',
+	data: {
+		name: "",
+		vin: "",
+		dopInfo: ""
+	},
+	methods: {
+		sendMail: function() {
+			if (nav.currentBrand != null &&
+				nav.currentModel != null &&
+				nav.currentEngine != null) {
+			axios.get('../php/main.php?name=' + this.name);
+			}
+	}
 	}
 });
