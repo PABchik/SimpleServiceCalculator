@@ -41,13 +41,13 @@ var nav = new Vue({
 			this.currentBrandName = nav.currentBrand.name;
 			this.clearCurrentModel();
 			this.clearCurrentEngine();
-			serviceVue.clearChecked();
+			serviceVue.clearServices();
 			expense.calc();
 			this.getModels();
 		},
 		changeModel: function(event) {
 			this.clearCurrentEngine();
-			serviceVue.clearChecked();
+			serviceVue.clearServices();
 			expense.calc();
 			if (nav.currentModel != null){
 				nav.currentModelName = nav.currentModel.name;
@@ -59,10 +59,11 @@ var nav = new Vue({
 		changeEngine: function() {
 			if (this.currentBrand != null && this.currentModel != null && this.currentEngine != null) {
 				nav.currentEngineName = this.currentEngine.name;
+				serviceVue.clearChecked();
 				serviceVue.findServices();
 			}
 			else {
-				serviceVue.services = null;
+				serviceVue.clearServices();
 			}
 		},
 		clearCurrentEngine: function() {
@@ -99,7 +100,6 @@ var serviceVue = new Vue({
 				var result = JSON.stringify(response.data);
 				result = JSON.parse(result);
 				serviceVue.services = result;
-				serviceVue.partTypesForService = [];
 				serviceVue.getPartTypesForService();
 			})
 			} else {
@@ -110,9 +110,15 @@ var serviceVue = new Vue({
 			serviceVue.checkedService = [];
 				serviceVue.checkedPartTypes = [];
 				serviceVue.checkedParts = [];
+				expense.calc();
+		},
+		clearServices: function() {
+			this.clearChecked();
+			this.services = null;
+			this.partTypesForService = null;
+			this.partsForCar = null;
 		},
 		getPartTypesForService: function() {
-			
 				axios.get('../php/main.php?fun=getPartTypes').then(function(response) {
 					var result = JSON.stringify(response.data);
 					result = JSON.parse(result);
@@ -157,7 +163,13 @@ var serviceVue = new Vue({
 			expense.calc();
 		},
 		addPart:function(part) {
-			expense.addPart(part);
+			serviceVue.checkedParts.forEach(function(item, i) {
+				if (part.service_for_car_id == item.service_for_car_id && part.part_type_id == item.part_type_id) {
+					serviceVue.checkedParts.splice(i, 1);
+				}
+			});
+			serviceVue.checkedParts.push(part);
+			expense.calc();
 		}
 	
 }
@@ -171,9 +183,6 @@ var expense = new Vue({
 		
 	},
 	methods: {
-		findServices: function() {
-			nav.findServices();
-		},
 		calc: function() {
 			expense.work = 0;
 			expense.parts = 0;
@@ -185,15 +194,6 @@ var expense = new Vue({
 					expense.parts += Number(item.price) * Number(item.count);
 				});
 			} 
-		},
-		addPart: function(part) {
-			serviceVue.checkedParts.forEach(function(item, i) {
-				if (part.service_for_car_id == item.service_for_car_id && part.part_type_id == item.part_type_id) {
-					serviceVue.checkedParts.splice(i, 1);
-				}
-			});
-			serviceVue.checkedParts.push(part);
-			expense.calc();
-		}
+		}//,		addPart: function(part) 
 	}
 });
