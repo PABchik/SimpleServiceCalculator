@@ -141,21 +141,22 @@
             </div>
 	   </div>
          <a href="form"></a>
-         <div id="form">
+         <div id="form" style="margin-bottom: 150px;">
                 <div class="row" style="margin-top: 50px;">
+
                   <div class="col-sm-2"></div>
                   <div class="col-sm-5 form-box">
+                    <h1 class="header text-center" style="padding:30px;display:block;background-color:#b72a20;color:white;">Запись на ТО</h1>
                   	 <label>Укажите Ваше имя</label><br>
                   	 <input type="text" name="name" v-model="name" placeholder="Ваше Имя"><br><br>
                      <label>Пожалуйста, укажите VIN номер вашего автомобиля, чтобы наши сотрудники могли еще раз все перепроверить</label>
-                     <input type="text" placeholder="Введите ваш VIN" v-model="vin"><br><br>
+                     <input type="text" placeholder="Введите ваш VIN" v-model="vin" maxlength="17"><br><br>
                      <div style="margin:20px auto;">
                			<button type="button" v-on:click="sendMail()" class="btn btn-danger">Записаться на ТО!</button>
                		 </div>
                   </div>
                   <div class="col-sm-5"></div>
                </div>
-               {{res}}
           </div>
        </div>
       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
