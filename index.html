@@ -149,14 +149,13 @@
                   	 <input type="text" name="name" v-model="name" placeholder="Ваше Имя"><br><br>
                      <label>Пожалуйста, укажите VIN номер вашего автомобиля, чтобы наши сотрудники могли еще раз все перепроверить</label>
                      <input type="text" placeholder="Введите ваш VIN" v-model="vin"><br><br>
-                     <label>Пожалуйста, укажите дополнительные пожелания и мы постараемся их исполнить</label>
-                     <textarea name="comments" class="form-control" placeholder="Дополнительные комментарии" v-model="dopInfo"></textarea><br><br>
                      <div style="margin:20px auto;">
                			<button type="button" v-on:click="sendMail()" class="btn btn-danger">Записаться на ТО!</button>
                		 </div>
                   </div>
                   <div class="col-sm-5"></div>
                </div>
+               {{res}}
           </div>
        </div>
       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

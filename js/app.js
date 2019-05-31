@@ -83,7 +83,7 @@ var serviceVue = new Vue({
 	el: '#services',
 	data: {
 		services: null,
-		checkedService: null,
+		checkedService: [],
 		partTypesForService: null,
 		checkedPartTypes:[],
 		partsForCar: null,
@@ -185,7 +185,7 @@ var expense = new Vue({
 		calc: function() {
 			expense.work = 0;
 			expense.parts = 0;
-			if (serviceVue.checkedService != [] && serviceVue.checkedParts != []) {
+			if (serviceVue.checkedService.length > 0) {
 				serviceVue.checkedService.forEach(function(item) {
 					expense.work += Number(item.price);
 				});
@@ -203,7 +203,8 @@ var form = new Vue({
 	data: {
 		name: "",
 		vin: "",
-		dopInfo: ""
+		dopInfo: "",
+		res: null
 	},
 	methods: {
 		sendMail: function() {
@@ -211,22 +212,29 @@ var form = new Vue({
 				nav.currentModel != null &&
 				nav.currentEngine != null &&
 				this.vin != null &&
-				this.name != null) {
-				alert('../php/main.php?name=' + this.name +
+				this.name != null &&
+				serviceVue.checkedService.length > 0) {
+			axios.get('../php/main.php?fun=addTicket&' +
+				'name=' + form.name +
 				'&brand=' + nav.currentBrand.id + 
 				'&model='+ nav.currentModel.id + 
 				'&engine=' + nav.currentEngine.code + 
 				'&total=' + (expense.work + expense.parts) + 
-				'&dopInfo=' + this.dopInfo + 
-				'&vin=' + this.vin);
-			/*axios.get('../php/main.php?name=' + this.name +
-				'&brand=' + nav.currentBrand.id + 
-				'&model='+ nav.currentModel.id + 
-				'&engine=' + nav.currentEngine.id + 
-				'&total=' + expense.work + expense.parts + 
-				'&vin=' + this.vin);*/
-
-			}
+				'&vin=' + form.vin).then(function(response) {
+			});
+				axios.get('../php/main.php?fun=getCurrentTicketId').then(function(response) {
+				var result = JSON.stringify(response.data);
+				result = JSON.parse(result);
+				form.res = result;
+			});
+			serviceVue.clearServices();
+			nav.clearCurrentEngine();
+			this.clearFields();
+		}
+	},
+	clearFields: function() {
+		this.vin = "";
+		this.name = "";
 	}
 	}
 });

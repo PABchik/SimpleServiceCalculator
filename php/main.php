@@ -96,6 +96,40 @@ $db = new DBHelper($host, $user, $password, $database);
                     $_GET['engine']."'
                     order by part.name");
         break;
+        case "addTicket": 
+            if (isset($_GET['name']) && isset($_GET['brand']) && isset($_GET['model']) && isset($_GET['engine']) &&
+                isset($_GET['total']) && isset($_GET['vin'])) {
+                $newTicketId = $db -> getQuery("select count(*) as id from ticket")[0]['id'] + 1;
+                $date = date("Y-m-d");
+                // echo $date."<br><br>";
+               /* echo "insert into ticket
+                (`id`, `date`, `customer_name`, `brand_id`, `model_id`, `engine_id`, `total`, `vin`)
+                 values('".$newTicketId."',
+                    '".$date."',
+                    '".$_GET['name']."',
+                    '".$_GET['brand']."',
+                    '".$_GET['model']."',
+                    '".$_GET['engine']."',
+                    '".$_GET['total']."',
+                    '".$_GET['vin']."',
+                    )";*/
+                echo json_encode($newTicketId);
+                $db -> execQuery("insert into ticket
+                (`id`, `date`, `customer_name`, `brand_id`, `model_id`, `engine_id`, `total`, `vin`)
+                 values('".$newTicketId."',
+                    '".$date."',
+                    '".$_GET['name']."',
+                    '".$_GET['brand']."',
+                    '".$_GET['model']."',
+                    '".$_GET['engine']."',
+                    '".$_GET['total']."',
+                    '".$_GET['vin']."'
+                    )");
+            }
+        break;
+        case "getCurrentTicketId" :
+            $result = $db -> getQuery("select count(*) as id from ticket")[0]['id'];
+        break;
             // }
     }
     if (!empty($result)) {
