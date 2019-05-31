@@ -3,7 +3,7 @@
     <style>
          .sticky {
          position: fixed;
-         top: 0px;  /* если ноль заменить на число (и в скрипте тоже), то блок будет прилипать до того, как верхний край окна браузера дойдёт до верхнего края элемента. Может быть отрицательным числом. Применим, например, при фиксированном сверху меню */
+         top: 0px;
          z-index: 101;
          }
       </style>
@@ -16,7 +16,6 @@
    </head>
    <body>
       <div class="container-fluid">
-         <!-- <div class="service-box"> -->
          <div id="nav">
             <div class="row" style="">
                <div class="col-sm-2"></div>
@@ -52,7 +51,6 @@
                   </select>
                </div>
                <div class="col"></div>
-               <!-- <div class="col"></div> -->
             </div>
             <div class="row" style="margin-top:50px">
                <div class="col-sm-2"></div>
@@ -76,8 +74,6 @@
                      <span v-else> не выбрано </span>
                   </h5>
                </div>
-               <!-- <div class="col-sm-1"></div> -->
-               <!-- <div class="col"></div> -->
                <div class="col-sm-2">
                   <img v-if="currentModelImgSrc != null" v-bind:src="currentModelImgSrc" class="img-fluid" style="margin-bottom: 15px;">
                   <div v-else style="background-color: #b72a20; color:white;">
@@ -86,21 +82,13 @@
                </div>
                <div class="col-sm-2"></div>
             </div>
-            <!-- <p>{{ currentBrand }}</p>
-               <p>{{ brands }}</p>
-               
-               <p>{{ currentModel }} </p>
-               
-               <p>current engine-{{ currentEngine }} </p> -->
-         </div>
+        </div>
          <div id="expenses">
           <div class="row">
             <div class="col-sm-7"></div>
             <div class="col-sm-3 border-box" id="aside1">
-                  <!-- {{currentBrandImgSrc}} -->
                   <p class="font-weight-bold">стоимость работ: <br>{{ work }}  &#x20bd;</p>
                   <p class="font-weight-bold">стоимость запчастей: <br>{{ parts }}  &#x20bd;</p>
-                  <!-- <p class="font-weight-bold lead">___________________</p> -->
                   <p class="font-weight-bold lead" style="border-top:2px solid #b72a20;">Итого: {{ work + parts }}  &#x20bd;</p>
                   <div class="row">
                     <div class="col-sm-2"></div>
@@ -113,9 +101,7 @@
             <div class="col-sm-2"></div>
           </div>
          </div>
-         <!-- </div> -->
          <div id="services" style="margin-top:50px">
-            <!-- <p>{{ services }}</p> -->
             <div>
                <div v-for="s in services">
                   <div class="row">
@@ -127,9 +113,6 @@
                         </h5>
                         <div>
                            <div v-for="type in partTypesForService">
-                              <!-- <p>{{ type.service_for_car_id == s.id }} </p> -->
-                              <!-- <div class="row"> -->
-                              <!-- <div class="col"></div> -->
                               <div>
                                  <div v-if="type.service_for_car_id == s.id && checkedService.indexOf(s) != -1">
                                     <h6><label><input type="checkbox" v-bind:value="type" v-model="checkedPartTypes" v-bind:id="type" v-on:click="checkChanges(s.id, type.part_type_id)">
@@ -137,7 +120,6 @@
                                     </h6>
                                     <div>
                                        <div v-for="part in partsForCar">
-                                          <!-- <p>{{part.name}}  {{part}}</p> -->
                                           <div class="row">
                                              <div class="col-sm-1"></div>
                                              <div class="col-sm-11">
@@ -150,42 +132,14 @@
                                     </div>
                                  </div>
                               </div>
-                              <!-- <p>{{ partTypesForService }}</p> -->
                            </div>
                         </div>
                      </div>
                      <div class="col-sm-5"></div>
                   </div>
                </div>
-               
-               <!--
-                  <div class="row" v-if="services != null">
-                  	<div class="col-sm-2"></div>
-                  	<div class="col-sm-5 service-box">
-                  		<label>Пожалуйста, укажите VIN номер вашего автомобиля, чтобы наши сотрудники могли еще раз все перепроверить</label>
-                  		<input type="text" max-lenght="1" name="vin" class="form-control">
-                  	</div>
-                  	<div class="col-sm-5"></div>
-                  </div>
-                  <div class="row" v-if="services != null">
-                  	<div class="col-sm-2"></div>
-                  	<div class="col-sm-5 service-box">
-                  		<label>Пожалуйста, укажите номер телефона, чтобы мы могли перезвонить вам и договориться о вашем визите</label>
-                  		<input type="text" name="phone" class="form-control">
-                  	</div>
-                  	<div class="col-sm-5"></div>
-                  </div>
-                  </div>
-                  <p>{{ checkedService }}</p>
-                  <p>{{ checkedPartTypes }}</p>
-                  <!- p>{{services}}</p>
-                  <p>{{partTypesForService}}</p>
-                  <p>{{ partsForCar }} </p> -->
-               <!-- <p>{{checkedParts}}</p> -->
             </div>
-            <!-- <div style="height: 1000px; background-color:red">
-               </div> -->
-         </div>
+	   </div>
          <a href="form"></a>
          <div id="form">
                 <div class="row" style="margin-top: 50px;">
@@ -199,18 +153,7 @@
                   <div class="col-sm-5"></div>
                </div>
           </div>
-         <!-- <div id="brandModelSettings">
-            <select>
-            	<option v-for="logo in logos">{{ logo.img_src }}</option>
-            </select>
-            <p> {{ logos }} </p>
-            <select>	
-            	<option v-for="logo in logos">{{ logo.img_src }}</option>
-            	
-            </select>
-            <p>{{ v }}</p>
-            </div> -->
-      </div>
+       </div>
       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
