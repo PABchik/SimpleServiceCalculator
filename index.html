@@ -44,7 +44,7 @@
                </div>
                <div class="col">
                   <h5 class="text-center">Двигатель</h5>
-                  <select v-model="currentEngine" class="form-control" v-on:change="findServices()">
+                  <select v-model="currentEngine" class="form-control" v-on:change="changeEngine()">
                      <option v-if="currentBrand == null" disabled>Сначала выберите марку и модель вашего автомобиля</option>
                      <option v-if="currentModel == null && currentBrand != null" disabled>Сначала выберите модель вашего автомобиля</option>
                      <option v-else disabled>Выберите двигатель вашего автомобиля</option>
