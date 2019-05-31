@@ -209,8 +209,23 @@ var form = new Vue({
 		sendMail: function() {
 			if (nav.currentBrand != null &&
 				nav.currentModel != null &&
-				nav.currentEngine != null) {
-			axios.get('../php/main.php?name=' + this.name);
+				nav.currentEngine != null &&
+				this.vin != null &&
+				this.name != null) {
+				alert('../php/main.php?name=' + this.name +
+				'&brand=' + nav.currentBrand.id + 
+				'&model='+ nav.currentModel.id + 
+				'&engine=' + nav.currentEngine.code + 
+				'&total=' + (expense.work + expense.parts) + 
+				'&dopInfo=' + this.dopInfo + 
+				'&vin=' + this.vin);
+			/*axios.get('../php/main.php?name=' + this.name +
+				'&brand=' + nav.currentBrand.id + 
+				'&model='+ nav.currentModel.id + 
+				'&engine=' + nav.currentEngine.id + 
+				'&total=' + expense.work + expense.parts + 
+				'&vin=' + this.vin);*/
+
 			}
 	}
 	}
