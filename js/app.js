@@ -161,9 +161,9 @@ var serviceVue = new Vue({
 		calcExpense: function() {
 			expense.calc();
 		},
-		addPart:function(part) {
+		addPart:function(part, serviceForCarId) {
 			serviceVue.checkedParts.forEach(function(item, i) {
-				if (part.service_for_car_id == item.service_for_car_id && part.part_type_id == item.part_type_id) {
+				if (serviceForCarId == item.service_for_car_id && part.part_type_id == item.part_type_id) {
 					serviceVue.checkedParts.splice(i, 1);
 				}
 			});

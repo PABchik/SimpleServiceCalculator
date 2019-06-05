@@ -125,7 +125,7 @@
                                              <div class="col-sm-1"></div>
                                              <div class="col-sm-11">
                                                 <div v-if="part.part_type_id == type.id && part.service_for_car_id == s.id && checkedPartTypes.indexOf(type) != -1">
-                                                   <label><input type="radio" v-bind:name="part.part_type_id" v-bind:value="part" v-on:click="addPart(part)" >{{part.name}}	{{ part.price * part.count}} &#x20bd;</label>
+                                                   <label><input type="radio" v-bind:name="type.id + s.id" v-bind:value="part" v-on:click="addPart(part, s.id)" >{{part.name}}	{{ part.price * part.count}} &#x20bd;</label>
                                                 </div>
                                              </div>
                                           </div>
