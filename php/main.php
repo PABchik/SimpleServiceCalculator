@@ -125,6 +125,8 @@ $db = new DBHelper($host, $user, $password, $database);
                     '".$_GET['total']."',
                     '".$_GET['vin']."'
                     )");
+                $ticketInfo = json_encode($_POST['body']);
+                $result = $ticketInfo -> parts;
             }
         break;
         case "getCurrentTicketId" :
