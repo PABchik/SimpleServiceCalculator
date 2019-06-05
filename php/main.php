@@ -97,8 +97,12 @@ $db = new DBHelper($host, $user, $password, $database);
                     order by part.name");
         break;
         case "addTicket": 
-            if (isset($_GET['name']) && isset($_GET['brand']) && isset($_GET['model']) && isset($_GET['engine']) &&
-                isset($_GET['total']) && isset($_GET['vin'])) {
+        $_POST = json_decode(file_get_contents('php://input'), true);
+        var_dump($_POST);
+            // var_dump($_POST);
+            // echo "test++test++test++test++test++test++test++";
+            if (isset($_POST['name']) && isset($_POST['brand']) && isset($_POST['model']) && isset($_POST['engine']) &&
+                isset($_POST['total']) && isset($_POST['vin'])) {
                 $newTicketId = $db -> getQuery("select count(*) as id from ticket")[0]['id'] + 1;
                 $date = date("Y-m-d");
                 // echo $date."<br><br>";
@@ -114,7 +118,7 @@ $db = new DBHelper($host, $user, $password, $database);
                     '".$_GET['vin']."',
                     )";*/
                 echo json_encode($newTicketId);
-                $db -> execQuery("insert into ticket
+                /*$db -> execQuery("insert into ticket
                 (`id`, `date`, `customer_name`, `brand_id`, `model_id`, `engine_id`, `total`, `vin`)
                  values('".$newTicketId."',
                     '".$date."',
@@ -124,9 +128,9 @@ $db = new DBHelper($host, $user, $password, $database);
                     '".$_GET['engine']."',
                     '".$_GET['total']."',
                     '".$_GET['vin']."'
-                    )");
-                $ticketInfo = json_encode($_POST['body']);
-                $result = $ticketInfo -> parts;
+                    )");*/
+                // $ticketInfo = json_encode($_POST['body']);
+                // var_dump($_POST);
             }
         break;
         case "getCurrentTicketId" :

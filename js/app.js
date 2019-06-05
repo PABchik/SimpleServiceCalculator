@@ -220,17 +220,28 @@ var form = new Vue({
 			};
 			infoForTicket.parts = serviceVue.checkedParts;
 			infoForTicket.services = serviceVue.checkedService;
-			axios.post('../php/main.php?fun=addTicket&' +
+			/*alert('../php/main.php?fun=addTicket&' +
 				'name=' + form.name +
 				'&brand=' + nav.currentBrand.id + 
 				'&model='+ nav.currentModel.id + 
 				'&engine=' + nav.currentEngine.code + 
 				'&total=' + (expense.work + expense.parts) + 
 				'&vin=' + form.vin,
-				"body="+JSON.stringify(infoForTicket)
-				).then(function(response) {
-					alert(response.data);
-					alert(serviceVue.checkedParts);
+				"body="+JSON.stringify(infoForTicket));*/
+			axios({method: 'post',
+				url:'../php/main.php?fun=addTicket', 
+				data: {
+					name: form.name,
+					brand: nav.currentBrand.id,
+					model: nav.currentModel.id,
+					engine: nav.currentEngine.code,
+					total: (expense.work + expense.parts),
+					vin: form.vin,
+					serviceInfo: infoForTicket
+				}
+				}).then(function(response) {
+					console.log(response.data);
+					// alert(serviceVue.checkedParts);
 			});
 				axios.get('../php/main.php?fun=getCurrentTicketId').then(function(response) {
 				var result = JSON.stringify(response.data);
