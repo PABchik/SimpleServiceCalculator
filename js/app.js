@@ -204,8 +204,7 @@ var form = new Vue({
 		name: "",
 		vin: "",
 		dopInfo: "",
-		res: null,
-		data: null
+		res: null
 	},
 	methods: {
 		sendMail: function() {
@@ -221,14 +220,7 @@ var form = new Vue({
 			};
 			infoForTicket.parts = serviceVue.checkedParts;
 			infoForTicket.services = serviceVue.checkedService;
-			/*alert('../php/main.php?fun=addTicket&' +
-				'name=' + form.name +
-				'&brand=' + nav.currentBrand.id + 
-				'&model='+ nav.currentModel.id + 
-				'&engine=' + nav.currentEngine.code + 
-				'&total=' + (expense.work + expense.parts) + 
-				'&vin=' + form.vin,
-				"body="+JSON.stringify(infoForTicket));*/
+			
 			axios({method: 'post',
 				url:'../php/main.php?fun=addTicket', 
 				data: {
@@ -242,7 +234,7 @@ var form = new Vue({
 				}
 				}).then(function(response) {
 					console.log(response.data);
-					// alert(serviceVue.checkedParts);
+					
 			});
 				axios.get('../php/main.php?fun=getCurrentTicketId').then(function(response) {
 				var result = JSON.stringify(response.data);
