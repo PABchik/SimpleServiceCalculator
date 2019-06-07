@@ -37,4 +37,13 @@ class DBHelper {
 		$result = mysqli_fetch_all($result, MYSQLI_ASSOC);
 		return $result;
 	}
+
+	function execQuery($query) {
+		$res = mysqli_query($this->link, $query);
+		/*if ($res) {
+     	 echo '<p>Данные успешно добавлены в таблицу.</p>';
+    	} else {
+    	  echo '<p>Произошла ошибка: ' . mysqli_error($this->link) . '</p>';
+    	}*/
+	}
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Май 30 2019 г., 20:58
+-- Время создания: Май 31 2019 г., 10:00
 -- Версия сервера: 5.6.41
 -- Версия PHP: 5.5.38
 
@@ -216,7 +216,8 @@ INSERT INTO `part_type_for_service` (`id`, `part_type_id`, `service_for_car_id`,
 (5, 5, 3, 1),
 (6, 6, 4, 1),
 (7, 7, 5, 1),
-(8, 8, 6, 1);
+(8, 8, 6, 1),
+(123, 1, 2, 3);
 
 -- --------------------------------------------------------
 
@@ -271,6 +272,23 @@ INSERT INTO `service_for_car` (`id`, `service_id`, `brand_id`, `model_id`, `engi
 (5, 7, 1, 1, 'aaa123bmw', 200),
 (6, 8, 1, 1, 'aaa123bmw', 450),
 (7, 9, 1, 1, 'aaa123bmw', 200);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `ticket`
+--
+
+CREATE TABLE `ticket` (
+  `id` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `customer_name` varchar(200) NOT NULL,
+  `brand_id` int(11) NOT NULL,
+  `model_id` int(11) NOT NULL,
+  `engine_id` varchar(150) NOT NULL,
+  `total` int(11) NOT NULL,
+  `vin` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Индексы сохранённых таблиц
@@ -350,6 +368,14 @@ ALTER TABLE `service_for_car`
   ADD KEY `service_id` (`service_id`);
 
 --
+-- Индексы таблицы `ticket`
+--
+ALTER TABLE `ticket`
+  ADD KEY `brand_id` (`brand_id`),
+  ADD KEY `engine_id` (`engine_id`),
+  ADD KEY `model_id` (`model_id`);
+
+--
 -- Ограничения внешнего ключа сохраненных таблиц
 --
 
@@ -390,6 +416,14 @@ ALTER TABLE `service_for_car`
   ADD CONSTRAINT `service_for_car_ibfk_2` FOREIGN KEY (`engine_id`) REFERENCES `engine` (`code`),
   ADD CONSTRAINT `service_for_car_ibfk_3` FOREIGN KEY (`model_id`) REFERENCES `model` (`id`),
   ADD CONSTRAINT `service_for_car_ibfk_4` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `ticket`
+--
+ALTER TABLE `ticket`
+  ADD CONSTRAINT `ticket_ibfk_1` FOREIGN KEY (`brand_id`) REFERENCES `brand` (`id`),
+  ADD CONSTRAINT `ticket_ibfk_2` FOREIGN KEY (`engine_id`) REFERENCES `engine` (`code`),
+  ADD CONSTRAINT `ticket_ibfk_3` FOREIGN KEY (`model_id`) REFERENCES `model` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

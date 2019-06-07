@@ -54,7 +54,6 @@ var nav = new Vue({
 				nav.currentModelImgSrc = nav.currentModel.img_src;
 				this.getEngines();
 			}
-			nav.findServices();
 		},
 		changeEngine: function() {
 			if (this.currentBrand != null && this.currentModel != null && this.currentEngine != null) {
@@ -84,7 +83,7 @@ var serviceVue = new Vue({
 	el: '#services',
 	data: {
 		services: null,
-		checkedService: null,
+		checkedService: [],
 		partTypesForService: null,
 		checkedPartTypes:[],
 		partsForCar: null,
@@ -162,9 +161,9 @@ var serviceVue = new Vue({
 		calcExpense: function() {
 			expense.calc();
 		},
-		addPart:function(part) {
+		addPart:function(part, serviceForCarId) {
 			serviceVue.checkedParts.forEach(function(item, i) {
-				if (part.service_for_car_id == item.service_for_car_id && part.part_type_id == item.part_type_id) {
+				if (serviceForCarId == item.service_for_car_id && part.part_type_id == item.part_type_id) {
 					serviceVue.checkedParts.splice(i, 1);
 				}
 			});
@@ -186,7 +185,7 @@ var expense = new Vue({
 		calc: function() {
 			expense.work = 0;
 			expense.parts = 0;
-			if (serviceVue.checkedService != [] && serviceVue.checkedParts != []) {
+			if (serviceVue.checkedService.length > 0) {
 				serviceVue.checkedService.forEach(function(item) {
 					expense.work += Number(item.price);
 				});
@@ -194,6 +193,70 @@ var expense = new Vue({
 					expense.parts += Number(item.price) * Number(item.count);
 				});
 			} 
-		}//,		addPart: function(part) 
+		}
+	}
+});
+
+
+var form = new Vue({
+	el: '#form',
+	data: {
+		name: "",
+		vin: "",
+		dopInfo: "",
+		res: null,
+		data: null
+	},
+	methods: {
+		sendMail: function() {
+			if (nav.currentBrand != null &&
+				nav.currentModel != null &&
+				nav.currentEngine != null &&
+				this.vin != null &&
+				this.name != null &&
+				serviceVue.checkedService.length > 0) {
+			var infoForTicket = {
+				parts: null,
+				services: null
+			};
+			infoForTicket.parts = serviceVue.checkedParts;
+			infoForTicket.services = serviceVue.checkedService;
+			/*alert('../php/main.php?fun=addTicket&' +
+				'name=' + form.name +
+				'&brand=' + nav.currentBrand.id + 
+				'&model='+ nav.currentModel.id + 
+				'&engine=' + nav.currentEngine.code + 
+				'&total=' + (expense.work + expense.parts) + 
+				'&vin=' + form.vin,
+				"body="+JSON.stringify(infoForTicket));*/
+			axios({method: 'post',
+				url:'../php/main.php?fun=addTicket', 
+				data: {
+					name: form.name,
+					brand: nav.currentBrand.id,
+					model: nav.currentModel.id,
+					engine: nav.currentEngine.code,
+					total: (expense.work + expense.parts),
+					vin: form.vin,
+					serviceInfo: infoForTicket
+				}
+				}).then(function(response) {
+					console.log(response.data);
+					// alert(serviceVue.checkedParts);
+			});
+				axios.get('../php/main.php?fun=getCurrentTicketId').then(function(response) {
+				var result = JSON.stringify(response.data);
+				result = JSON.parse(result);
+				form.res = result;
+			});
+			serviceVue.clearServices();
+			nav.clearCurrentEngine();
+			this.clearFields();
+		}
+	},
+	clearFields: function() {
+		this.vin = "";
+		this.name = "";
+	}
 	}
 });
