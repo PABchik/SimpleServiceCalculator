@@ -7,8 +7,7 @@ header('Content-Type: application/json');
 $db = new DBHelper($host, $user, $password, $database);
 
     if(!empty($_GET['fun'])) {
-    // echo "1";
-    // echo ($_GET['fun']);
+    
     switch($_GET['fun']) {
         case "getBrands":
                 $result = $db -> getQuery("select * from brand order by name");
@@ -25,21 +24,11 @@ $db = new DBHelper($host, $user, $password, $database);
                     from engine
                 join engine_model on engine_model.engine_id=engine.code 
                 where engine_model.model_id =".$_GET['model']." order by engine.name"); 
-            //select engine.name, engine.code from model join engine_model on engine_model.model_id join engine on engine.code = engine_model.engine_id where model.brand_id=1 and model.id = 1 order by engine.name
+            
             break;
         case "findServices":
             if (!empty($_GET['brand']) && !empty($_GET['model']) && !empty($_GET['engine'])) {
-                /*echo "select sfc.id,
-                sfc.service_id,
-                sfc.price,
-                s.name,
-                s.description
-                 from service_for_car sfc 
-                    left join service s on s.id=sfc.service_id 
-                    where sfc.brand_id=".
-                    $_GET['brand']." and sfc.model_id=".
-                    $_GET['model']." and sfc.engine_id='".
-                    $_GET['engine']."'";*/
+              
                 $result = $db->getQuery("select sfc.id,
                 sfc.service_id,
                 sfc.price,
@@ -54,31 +43,12 @@ $db = new DBHelper($host, $user, $password, $database);
             }
             break;
         case "getPartTypes":
-        /*echo "select * from part_type_for_service ptfs
-                    join part_type pt on pt.id=ptfs.part_type_id
-                    where ptfs.service_for_car_id=".$_GET['id'];*/
-            // if (!empty($_GET['id'])) {
-                /*echo "select * from part_type_for_service ptfs
-                    join part_type pt on pt.id=ptfs.part_type_id";*/
+        
                 $result = $db->getQuery("select * from part_type_for_service ptfs
                     join part_type pt on pt.id=ptfs.part_type_id");
                 break;
         case "getPartsForCar":
-        /*echo "select * from car_part cp
-                    join part on part.id=cp.part_code_id 
-                    where cp.brand_id=".
-                    $_GET['brand']." and cp.model_id=".
-                    $_GET['model']." and cp.engine_id='".
-                    $_GET['engine']."'";*/
-                    /*echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
-                    var_dump($_GET);
-                    echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
-                    echo "select * from car_part cp
-                    join part on part.code=cp.part_id 
-                    where cp.brand_id=".
-                    $_GET['brand']." and cp.model_id=".
-                    $_GET['model']." and cp.engine_id='".
-                    $_GET['engine']."'";*/
+        
              $result = $db->getQuery("select 
                     cp.id,
                     part.code,
@@ -98,33 +68,19 @@ $db = new DBHelper($host, $user, $password, $database);
         break;
         case "getTicket":
             $ticketInfo = $db -> getQuery("select * from ticket where id=".$_GET['id']);
-            // echo "select * from ticket where id = ".$_GET['id'];
+            
             var_dump($ticketInfo);
         break;
         case "addTicket": 
         $_POST = json_decode(file_get_contents('php://input'), true);
-        // var_dump($_POST);
-            // var_dump($_POST);
-            // echo "test++test++test++test++test++test++test++";
+        
             if (isset($_POST['name']) && isset($_POST['brand']) && isset($_POST['model']) && isset($_POST['engine']) &&
                 isset($_POST['total']) && isset($_POST['vin']) && isset($_POST['serviceInfo']) && isset($_POST['serviceInfo']['services'])) {
                 $newTicketId = $db -> getQuery("select count(*) as id from ticket")[0]['id'] + 1;
                 $newServiceTicketId = $db -> getQuery("select count(*) as id from service_ticket")[0]['id'] + 1;
                 $newPartTicketId = $db -> getQuery("select count(*) as id from part_ticket")[0]['id'] + 1;
                 $date = date("Y-m-d");
-                // echo $date."<br><br>";
-               /* echo "insert into ticket
-                (`id`, `date`, `customer_name`, `brand_id`, `model_id`, `engine_id`, `total`, `vin`)
-                 values('".$newTicketId."',
-                    '".$date."',
-                    '".$_GET['name']."',
-                    '".$_GET['brand']."',
-                    '".$_GET['model']."',
-                    '".$_GET['engine']."',
-                    '".$_GET['total']."',
-                    '".$_GET['vin']."',
-                    )";*/
-                // echo json_encode($newTicketId);
+                
                 $db -> execQuery("insert into ticket
                 (`id`, `date`, `customer_name`, `brand_id`, `model_id`, `engine_id`, `total`, `vin`)
                  values('".$newTicketId."',
@@ -136,7 +92,6 @@ $db = new DBHelper($host, $user, $password, $database);
                     '".$_POST['total']."',
                     '".$_POST['vin']."'
                     )");
-//сделать заполнение таблиц service_ticket, part_ticket и отправку писем. Сделать отдельный конфиг файл с указанием все адресатов
                 foreach ( $_POST['serviceInfo']['services'] as $service ) {
                     $db -> execQuery("insert into service_ticket
                     (`id`, `service_id`, `ticket_id`, `price`)
@@ -145,7 +100,7 @@ $db = new DBHelper($host, $user, $password, $database);
                         '".$newTicketId."',
                         '".$service["price"]."'
                         )");
-                    // var_dump($service);
+                    
                     $newServiceTicketId++;
                 }
                 if (isset($_POST['serviceInfo']['parts'])) {
@@ -158,14 +113,13 @@ $db = new DBHelper($host, $user, $password, $database);
                             '".$part["price"]."',
                             '".$part['count']."'
                             )");
-                        // var_dump($part);
+                      
                         
                         $newPartTicketId++;
 
                     }
                 }
-                // $ticketInfo = json_encode($_POST['body']);
-                // var_dump($_POST);
+                
                 $ticketParts = $db -> getQuery("select p.name as 'name', 
                     pt.count as 'count',
                     pt.price as 'price'
@@ -202,10 +156,10 @@ $db = new DBHelper($host, $user, $password, $database);
         case "getCurrentTicketId" :
             $result = $db -> getQuery("select count(*) as id from ticket")[0]['id'];
         break;
-            // }
+        
     }
     if (!empty($result)) {
-                    // echo "8";
+                    
                     echo json_encode($result);
                 }
 }
@@ -213,19 +167,3 @@ $db = new DBHelper($host, $user, $password, $database);
 function getTicketInfo($ticketId) {
     return $db -> getQuery("select * from ticket where id = ".$ticketId);
 }
-// echo $_GET['fun'] == "getPartTypes";
-/*
-
-select t.id as "ticket_id",
-t.customer_name as "customer_name",
-t.total as "total",
-st.service_id as "service_id_t",
-sfc.service_id as "service_id_sfc",
-st.price as "price1",
-sfc.price as "price2",
-s.name as "service_name"
-from ticket t
-left join service_ticket st on st.ticket_id=t.id
-left join service s on s.id=st.service_id
-left join (select * from service_for_car where brand_id=1 and model_id=1 and engine_id="aaa123bmw") sfc on sfc.service_id=st.service_id
-where t.id = 3*/
