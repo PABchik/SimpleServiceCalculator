@@ -204,7 +204,8 @@ var form = new Vue({
 		name: "",
 		vin: "",
 		dopInfo: "",
-		res: null
+		res: null,
+		data: null
 	},
 	methods: {
 		sendMail: function() {
